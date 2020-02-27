@@ -61,12 +61,12 @@ export const utils: Object = {
   },
 };
 
-export const genericClass: Object = {
+export const genericClass = {
   addressIndexOutsideRange:
     'The address index you provided is outside the address count range you derived when opening the wallet',
 };
 
-export const helpers: Object = {
+export const helpers = {
   verifyMessageSignature: {
     wrongLength:
       "The provided signature's buffer has the wrong length. Most likely your initial signature is also the wrong length. Expected 64 bits",

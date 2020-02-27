@@ -1,12 +1,12 @@
 /* @flow */
 
-export type DerivationPathObjectType = {|
+export type DerivationPathObjectType = {
   purpose?: number,
   coinType?: number,
   account?: number,
   change?: number,
   addressIndex?: number,
-|};
+};
 
 export type DerivationPathDefaultType = {
   HEADER_KEY: string,
@@ -36,9 +36,9 @@ export type WalletObjectType = {
   keystore?: Promise<string>,
   mnemonic?: string,
   path?: string,
-  +derivationPath?: Promise<string>,
+  readonly derivationPath?: Promise<string>,
   privateKey?: string,
-  +publicKey?: Promise<string>,
+  readonly publicKey?: Promise<string>,
   sign: (...*) => Promise<TransactionObjectType>,
 };
 

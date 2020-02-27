@@ -1,6 +1,6 @@
 /* @flow */
 
-import type { DerivationPathDefaultType } from './flowtypes';
+import { DerivationPathDefaultType } from './generalTypes';
 
 /*
  * Build environment
@@ -66,7 +66,7 @@ export const UNDEFINED: string = 'undefined';
 /*
  * Hash types
  */
-export const HEX_HASH_TYPE: string = 'hex';
+export const HEX_HASH_TYPE: BufferEncoding = 'hex';
 
 export const WEI_MINIFICATION: number = 1e18;
 export const GWEI_MINIFICATION: number = 1e9;
@@ -75,7 +75,7 @@ export const GWEI_MINIFICATION: number = 1e9;
  * Default class descriptors.
  * Most likely to be used with `Object.defineProperty()`
  */
-export const DESCRIPTORS: Object = {
+export const DESCRIPTORS = {
   GETTERS: {
     enumerable: true,
     configurable: true,
@@ -122,7 +122,7 @@ export const HTTPS_PROTOCOL: string = 'https:';
 /*
  * Chain IDs
  */
-export const CHAIN_IDS: Object = {
+export const CHAIN_IDS = {
   HOMESTEAD: 1,
   ROPSTEN: 3,
   RINKEBY: 4,

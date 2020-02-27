@@ -14,9 +14,10 @@ import { genericClass as messages } from './messages';
 import { HEX_HASH_TYPE, DESCRIPTORS, SPLITTER, CHAIN_IDS } from './defaults';
 import { TYPE_GENERIC, SUBTYPE_GENERIC } from './types';
 
-import type { GenericClassArgumentsType } from './flowtypes';
+import { GenericClassArgumentsType } from './generalTypes';
 
-const { GETTERS, SETTERS, WALLET_PROPS, GENERIC_PROPS } = DESCRIPTORS;
+
+//const { GETTERS, SETTERS, WALLET_PROPS, GENERIC_PROPS } = DESCRIPTORS;
 
 /*
  * "Private" (internal) variable(s).
@@ -40,38 +41,17 @@ export default class GenericWallet {
 
   chainId: number;
 
-  /*
-   * Both `publicKey` and `derivationPath` are getters.
-   */
-
-  publicKey: Promise<string>;
-
-  derivationPath: Promise<string>;
-
   type: string;
 
   subtype: string;
 
-  setDefaultAddress: number => Promise<boolean>;
-
-  /*
-   * @TODO Add specific Flow types
-   *
-   * For the three main wallet methods
-   */
-  sign: (...*) => Promise<string>;
-
-  signMessage: (...*) => Promise<string>;
-
-  verifyMessage: (...*) => Promise<string>;
-
   constructor({
-    publicKey,
+    publicKey ,
     chainCode,
     rootDerivationPath,
     addressCount = 10,
     chainId = CHAIN_IDS.HOMESTEAD,
-  }: GenericClassArgumentsType) {
+  } : GenericClassArgumentsType) {
     /*
      * Validate address count (this comes from the end user)
      */
@@ -86,10 +66,7 @@ export default class GenericWallet {
      * Derive the public key with the address index, so we can get the address
      */
     const hdKey = new HDKey();
-    /*
-     * Sadly Flow doesn't have the correct types for node's Buffer Object
-     */
-    /* $FlowFixMe */
+
     hdKey.publicKey = Buffer.from(publicKey, HEX_HASH_TYPE);
     /*
      * Sadly Flow doesn't have the correct types for node's Buffer Object
@@ -103,12 +80,12 @@ export default class GenericWallet {
        */
       new Array(addressCount || 1),
       (value, index) => {
-        const addressObject = {};
+        //const addressObject : GenericClassArgumentsType = {};
         const derivationKey = hdKey.deriveChild(index);
         /*
          * Set this individual address's derivation path
          */
-        addressObject.derivationPath =
+        const addressObject_derivationPath =
           rootDerivationPath.substr(-1) === SPLITTER
             ? `${rootDerivationPath}${index}`
             : `${rootDerivationPath}${SPLITTER}${index}`;
@@ -118,7 +95,9 @@ export default class GenericWallet {
         const derivedPublicKey = derivationKey.publicKey.toString(
           HEX_HASH_TYPE,
         );
-        addressObject.publicKey = hexSequenceNormalizer(derivedPublicKey);
+        const addressObject_publicKey = hexSequenceNormalizer(derivedPublicKey);
+
+
         /*
          * Generate the address from the derived public key
          */
@@ -133,7 +112,13 @@ export default class GenericWallet {
          * Also validate the address that comes from the `HDKey` library.
          */
         addressValidator(addressFromPublicKey);
-        addressObject.address = addressNormalizer(addressFromPublicKey);
+
+        const addressObject =
+            { publicKey: addressObject_publicKey,
+              derivationPath: addressObject_derivationPath,
+              address: addressNormalizer(addressFromPublicKey)
+            };
+
         return addressObject;
       },
     );
@@ -154,10 +139,10 @@ export default class GenericWallet {
      * write a helper method for this.
      */
     Object.defineProperties(this, {
-      address: Object.assign({}, { value: otherAddresses[0].address }, SETTERS),
-      chainId: Object.assign({}, { value: chainId }, WALLET_PROPS),
-      type: Object.assign({}, { value: TYPE_GENERIC }, GENERIC_PROPS),
-      subtype: Object.assign({}, { value: SUBTYPE_GENERIC }, GENERIC_PROPS),
+      address: Object.assign({}, { value: otherAddresses[0].address }, DESCRIPTORS.SETTERS),
+      chainId: Object.assign({}, { value: chainId }, DESCRIPTORS.WALLET_PROPS),
+      type: Object.assign({}, { value: TYPE_GENERIC }, DESCRIPTORS.GENERIC_PROPS),
+      subtype: Object.assign({}, { value: SUBTYPE_GENERIC }, DESCRIPTORS.GENERIC_PROPS),
       /**
        * Set the default address/public key/path one of the (other) addresses from the array.
        * This is usefull since most methods (sign, signMessage) use this props as defaults.
@@ -206,18 +191,18 @@ export default class GenericWallet {
             );
           },
         },
-        WALLET_PROPS,
+          DESCRIPTORS.WALLET_PROPS,
       ),
       /*
        * These are just a placeholder static methods. They should be replaced (or deleted at least)
        * with methods that actually has some functionality.
        */
-      sign: Object.assign({}, { value: async () => {} }, GENERIC_PROPS),
-      signMessage: Object.assign({}, { value: async () => {} }, GENERIC_PROPS),
+      sign: Object.assign({}, { value: async () => {} }, DESCRIPTORS.GENERIC_PROPS),
+      signMessage: Object.assign({}, { value: async () => {} }, DESCRIPTORS.GENERIC_PROPS),
       verifyMessage: Object.assign(
         {},
         { value: async () => {} },
-        GENERIC_PROPS,
+          DESCRIPTORS.GENERIC_PROPS,
       ),
     });
     /*
@@ -225,27 +210,29 @@ export default class GenericWallet {
      *
      * Otherwise it's pointless since it just repeats information (first index
      * is also the default one).
-     */
+    */
     if (addressCount > 1) {
-      Object.defineProperty(
-        (this: any),
-        'otherAddresses',
-        Object.assign(
-          {},
-          {
-            /*
-             * Map out the publicKey and derivation path from the `otherAddresses`
-             * array that gets assigned to the Wallet instance.
-             *
-             * The user should only have access to `the publicKey` and `derivationPath` from the
-             * default account (set via `setDefaultAddress()`)
-             */
-            value: otherAddresses.map(({ address }) => address),
-          },
-          WALLET_PROPS,
-        ),
-      );
+     Object.defineProperty(
+       this,
+       'otherAddresses',
+       Object.assign(
+         {},
+         {
+           /*
+            * Map out the publicKey and derivation path from the `otherAddresses`
+            * array that gets assigned to the Wallet instance.
+            *
+     * The user should only have access to `the publicKey` and `derivationPath` from the
+            * default account (set via `setDefaultAddress()`)
+            */
+
+          value: otherAddresses.map(({ address }) => address),
+        },
+         DESCRIPTORS.WALLET_PROPS,
+       ),
+     );
     }
+
   }
 
   /*
@@ -266,7 +253,9 @@ export default class GenericWallet {
  * We need to use `defineProperties` to make props enumerable.
  * When adding them via a `Class` getter/setter it will prevent that by default
  */
+/*
 Object.defineProperties((GenericWallet: any).prototype, {
   publicKey: GETTERS,
   derivationPath: GETTERS,
 });
+*/

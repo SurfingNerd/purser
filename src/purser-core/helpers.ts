@@ -24,11 +24,11 @@ import {
   TRANSACTION,
 } from './defaults';
 
-import type {
+import {
   DerivationPathObjectType,
   TransactionObjectType,
   MessageVerificationObjectType,
-} from './flowtypes';
+} from './generalTypes';
 
 /**
  * Serialize an derivation path object's props into it's string counterpart
@@ -105,14 +105,16 @@ export const derivationPathSerializer = ({
  */
 export const recoverPublicKey = ({
   message,
-  signature,
-}: MessageVerificationObjectType = {}): string => {
-  const { verifyMessageSignature: messages } = helperMessages;
+  signature
+} : MessageVerificationObjectType): string => {
+
   const signatureBuffer = Buffer.from(
     /* $FlowFixMe */
     hexSequenceNormalizer(signature.toLowerCase(), false),
     HEX_HASH_TYPE,
   );
+
+  const messages = helperMessages.verifyMessageSignature;
   /*
    * It should be 65 bits in legth:
    * - 32 for the (R) point (component)
@@ -120,7 +122,7 @@ export const recoverPublicKey = ({
    * - 1 for the reco(V)ery param
    */
   if (signatureBuffer.length !== 65) {
-    throw new Error(messages.wrongLength);
+    throw new Error( messages.wrongLength);
   }
   /*
    * The recovery param is the the 64th bit of the signature Buffer
@@ -151,6 +153,8 @@ export const recoverPublicKey = ({
   );
 };
 
+
+
 /**
  * Verify a signed message.
  * By extracting it's public key from the signature and comparing it with a provided one.
@@ -166,11 +170,11 @@ export const recoverPublicKey = ({
  * @return {boolean} true or false depending if the signature is valid or not
  *
  */
-export const verifyMessageSignature = ({
+export const transactionObjectValidator =  ({
   publicKey,
   message,
   signature,
-}: Object): boolean => {
+}): boolean => {
   const { verifyMessageSignature: messages } = helperMessages;
   try {
     /*
@@ -431,7 +435,7 @@ export const messageOrDataValidator = (
  * @param {number} chainId The given chain ID (as defined in EIP-155)
  * @return {Object} The common chain definition
  */
-export const getChainDefinition = (chainId: number): {| common: Object |} => {
+export const getChainDefinition = (chainId: number): { common: Object { => {
   const baseChain = (() => {
     switch (chainId) {
       /*
