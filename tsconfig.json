@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "lib": ["es2018"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "strictNullChecks": false,
+    "strictPropertyInitialization": false,
+    "target": "es6",
+  }
+}
