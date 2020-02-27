@@ -6,5 +6,6 @@
     "strictNullChecks": false,
     "strictPropertyInitialization": false,
     "target": "es6",
+    "outDir": "./modules/node_modules/@colony", 
   }
 }
