@@ -42,7 +42,7 @@ export const PATH: DerivationPathDefaultType = {
 /*
  * Regex to use when validating strings
  */
-export const MATCH: Object = {
+export const MATCH = {
   DIGITS: /^\d+$/,
   ADDRESS: /^(0x)?([0-9a-fA-F]{40})$/,
   /*
@@ -98,7 +98,7 @@ export const DESCRIPTORS = {
 /*
  * Defaults for the transaction object
  */
-export const TRANSACTION: Object = {
+export const TRANSACTION  = {
   CHAIN_ID: 1,
   GAS_PRICE: 9000000000, // 9 Gwei
   GAS_LIMIT: 21000,
@@ -134,7 +134,7 @@ export const CHAIN_IDS = {
 /*
  * Network names
  */
-export const NETWORK_NAMES: Object = {
+export const NETWORK_NAMES = {
   MAINNET: 'mainnet',
   ROPSTEN: 'ropsten',
   RINKEBY: 'rinkeby',
@@ -145,7 +145,7 @@ export const NETWORK_NAMES: Object = {
 /*
  * Hardforks
  */
-export const HARDFORKS: Object = {
+export const HARDFORKS = {
   BYZANTIUM: 'byzantium',
   CHAINSTART: 'chainstart',
   CONSTANTINOPLE: 'constantinople',

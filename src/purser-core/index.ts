@@ -9,7 +9,7 @@ import * as types from './types';
 import * as utils from './utils';
 import GenericWallet from './genericWallet';
 
-const coreModule: Object = {
+const coreModule = {
   helpers,
   defaults,
   validators,

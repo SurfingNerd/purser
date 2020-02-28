@@ -1,7 +1,7 @@
 /* @flow */
 /* eslint-disable max-len */
 
-export const validators: Object = {
+export const validators = {
   derivationPath: {
     notString: 'Derivation path is not the correct type (expected a String)',
     notValidParts:
@@ -52,7 +52,7 @@ export const validators: Object = {
   },
 };
 
-export const utils: Object = {
+export const utils = {
   getRandomValues: {
     wrongArgumentType:
       'Expected the argument to be an instance of an Uint8Array typed array',

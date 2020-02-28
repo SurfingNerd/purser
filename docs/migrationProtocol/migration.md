@@ -20,4 +20,3 @@ Current Strategy: Start with purser-core and then digging forward to other modul
 - genericWallet `otherAddresses` property and in the constructor ?? added again ?! TODO: check.
 
 
-
