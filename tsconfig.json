@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "lib": ["es2018"],
+    "lib": ["es2018", "dom"],
     "module": "commonjs",
     "moduleResolution": "node",
     "strictNullChecks": false,
     "strictPropertyInitialization": false,
     "target": "es6",
-    "outDir": "./modules/node_modules/@colony", 
+    "outDir": "./modules/node_modules/@colony",
+    "esModuleInterop": true,
   }
 }

@@ -1,6 +1,5 @@
-/* @flow */
 
-import BN from 'bn.js';
+import  BN from 'bn.js';
 
 import {
   ENV,
@@ -42,7 +41,7 @@ export const verbose = (): boolean => {
  *
  * @param {any} args Arguments array that will be passed down to `console` methods (see above)
  */
-export const warning = (...args: Array<*>): void => {
+export const warning = (...args: Array<any>): void => {
   /*
    * Stop everything if we're in production mode.
    * No point in doing all the computations and assignments if we don't have to.
@@ -52,9 +51,9 @@ export const warning = (...args: Array<*>): void => {
   }
   let level: string = 'low';
   const lastArgIndex: number = args.length - 1;
-  const options: * = args[lastArgIndex];
-  const [message]: [string] = args;
-  const literalTemplates: Array<*> = args.slice(1);
+  const options = args[lastArgIndex];
+  const [message] = args;
+  const literalTemplates: Array<any> = args.slice(1);
   /*
    * We're being very specific with object testing here, since we don't want to
    * highjack a legitimate object that comes in as a template part (althogh
@@ -122,10 +121,10 @@ export const getRandomValues = (
    */
   if (
     typeof window !== 'undefined' &&
-    typeof window.msCrypto === 'object' &&
-    typeof window.msCrypto.getRandomValues === 'function'
+    typeof window['msCrypto'] === 'object' &&
+    typeof window['msCrypto'].getRandomValues === 'function'
   ) {
-    return window.msCrypto.getRandomValues(typedArray);
+    return window['msCrypto'].getRandomValues(typedArray);
   }
   /*
    * We can't find any crypto method, we'll try to do our own.
@@ -155,15 +154,10 @@ export const getRandomValues = (
  * @return {boolean} true if the expression is valid, false otherwise (and depending on the level, throw an error
  * or just log the warning)
  */
-export const assertTruth = ({
-  expression,
-  message,
-  level = 'high',
-}: {
+export const assertTruth = (
   expression: boolean,
-  message: string | Array<string>,
-  level?: string,
-} = {}): boolean => {
+  message: string| Array<string>,
+  level: string = 'high'): boolean => {
   if (expression) {
     return true;
   }
@@ -202,8 +196,11 @@ export const bigNumber = (value: number | string | BN): BN => {
   const oneWei = new BN(WEI_MINIFICATION.toString());
   const oneGwei = new BN(GWEI_MINIFICATION.toString());
   class ExtendedBN extends BN {
-    constructor(...args) {
-      super(...args);
+    constructor(number: number | string | number[] | Uint8Array | Buffer | BN,
+                base?: number | 'hex',
+                endian?: BN.Endianness) {
+
+      super(number, base, endian);
       const ExtendedBNPrototype = Object.getPrototypeOf(this);
       Object.defineProperties(ExtendedBNPrototype, {
         /*
@@ -273,26 +270,26 @@ export const objectToErrorString = (object: Object = {}): string =>
 export const validatorGenerator = (
   validationSequenceArray: Array<{
     expression: boolean,
-    message: string | Array<string>,
-    level: string,
+    message?: string | Array<string>,
+    level?: string,
   }>,
   genericError: string,
 ): boolean => {
   const validationTests: Array<boolean> = [];
-  validationSequenceArray.map((validationSequence: Object) =>
+  validationSequenceArray.map((validationSequence) =>
     validationTests.push(
+
       assertTruth(
         /*
          * If there's no message passed in, use the generic error
          */
-        Object.assign(
-          {},
-          { message: genericError, level: 'high' },
-          validationSequence,
+        validationSequence.expression,
+        validationSequence.message ?? genericError,
+        validationSequence.level ?? 'high'
         ),
       ),
-    ),
-  );
+    )
+
   /*
    * This is a fail-safe in case anything spills through.
    * If any of the values are `false` throw a general Error

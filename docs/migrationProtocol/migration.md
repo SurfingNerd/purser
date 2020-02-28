@@ -11,6 +11,17 @@ https://medium.com/inato/migrating-from-flow-to-typescript-why-how-worth-it-5b77
 Current Strategy: Start with purser-core and then digging forward to other modules.
 
 
+## typescript config changes
+
+### dom Modules
+the dom module was required for using the crypto functionality of windows
+(Maybe it could be bypassed by using hashtable accessor (this['window'] instead of this.window))
+
+### esModuleInterop flag
+esModuleInterop is required for the BN.js library. see: https://github.com/CodeChain-io/codechain-primitives-js/issues/68
+
+
+
 
 ## Known Issues
 
@@ -20,3 +31,5 @@ Current Strategy: Start with purser-core and then digging forward to other modul
 - genericWallet `otherAddresses` property and in the constructor ?? added again ?! TODO: check.
 
 
+## Should be tested
+- support for msCrypto (Edge browser)

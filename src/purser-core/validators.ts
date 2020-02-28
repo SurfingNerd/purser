@@ -1,4 +1,4 @@
-/* @flow */
+
 
 import BN from 'bn.js';
 
@@ -40,19 +40,18 @@ export const derivationPathValidator = (derivationPath: any): boolean => {
    * chunks is not correct the `match()` method call will fail before the
    * validator generator sequence will actually start.
    */
-  assertTruth({
+  assertTruth(
     /*
      * It should be composed of (at least) four parts
      * (purpouse, coin, account, change and/or index)
      */
-    expression: deSerializedDerivationPath.length === 4,
-    message: [
-      `${derivationPathMessages.notValidParts}: [`,
+    deSerializedDerivationPath.length === 4,
+    [`${derivationPathMessages.notValidParts}: [`,
       ...deSerializedDerivationPath,
       ']',
     ],
-  });
-  const validationSequence: Array<Object> = [
+  );
+  const validationSequence = [
     {
       /*
        * It should have the correct Header Key (the letter 'm')
@@ -139,7 +138,7 @@ export const derivationPathValidator = (derivationPath: any): boolean => {
  */
 export const safeIntegerValidator = (integer: any): boolean => {
   const { safeInteger: safeIntegerMessages } = messages;
-  const validationSequence: Array<Object> = [
+  const validationSequence = [
     {
       /*
        * It should be a number primitive
@@ -182,7 +181,7 @@ export const safeIntegerValidator = (integer: any): boolean => {
  */
 export const bigNumberValidator = (bigNumber: any): boolean => {
   const { bigNumber: bigNumberMessages } = messages;
-  const validationSequence: Array<Object> = [
+  const validationSequence = [
     {
       /*
        * It should be an instance of the BN Class
@@ -224,7 +223,7 @@ export const addressValidator = (address: any): boolean => {
   } catch (caughtError) {
     throw new Error(`${addressMessages.notStringSequence}: ${UNDEFINED}`);
   }
-  const validationSequence: Array<Object> = [
+  const validationSequence = [
     {
       /*
       * It should be a string
@@ -268,7 +267,7 @@ export const addressValidator = (address: any): boolean => {
  */
 export const hexSequenceValidator = (hexSequence: any): boolean => {
   const { hexSequence: hexSequenceMessages } = messages;
-  const validationSequence: Array<Object> = [
+  const validationSequence = [
     {
       /*
       * It should be a string
@@ -307,7 +306,7 @@ export const messageValidator = (string: any): boolean => {
    * Real creative naming there, huh...?
    */
   const { message: messageMessages } = messages;
-  const validationSequence: Array<Object> = [
+  const validationSequence = [
     {
       /*
       * It should be a string
@@ -343,7 +342,7 @@ export const messageValidator = (string: any): boolean => {
  */
 export const messageDataValidator = (data: any): boolean => {
   const { message: messageMessages } = messages;
-  const validationSequence: Array<Object> = [
+  const validationSequence = [
     {
       /*
       * It should be a hex string or UInt8Array

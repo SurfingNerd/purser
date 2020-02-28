@@ -110,7 +110,7 @@ export const TRANSACTION  = {
 /*
  * Values used to seed the initial signature object
  */
-export const SIGNATURE: Object = {
+export const SIGNATURE = {
   R: 0,
   S: 0,
   RECOVERY_ODD: 27,
