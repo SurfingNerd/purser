@@ -23,6 +23,7 @@ esModuleInterop is required for the BN.js library. see: https://github.com/CodeC
 
 
 
+
 ## Known Issues
 
 ### Removed Functionality
@@ -30,6 +31,25 @@ esModuleInterop is required for the BN.js library. see: https://github.com/CodeC
 - removed eslint for now, going to reactivate proper linting for TS later on.
 - genericWallet `otherAddresses` property and in the constructor ?? added again ?! TODO: check.
 
+
+## Possible Improvements
+
+## TransactionObjectType
+
+TransactionObjectType could be replaced with the less restrictive eth-core type TransactionConfig,
+
+´´´
+export interface TransactionConfig {
+    from?: string | number;
+    to?: string;
+    value?: number | string | BN;
+    gas?: number | string;
+    gasPrice?: number | string | BN;
+    data?: string;
+    nonce?: number;
+    chainId?: number;
+}
+´´´
 
 ## Should be tested
 - support for msCrypto (Edge browser)

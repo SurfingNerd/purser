@@ -232,15 +232,6 @@ export const verifyMessageSignature =  ({
  *
  * @return {TransactionObjectType} The validated transaction object containing the exact passed in values
  */
-const transactionObjectValidatorDefaultValue = {
-  gasPrice: bigNumber(TRANSACTION.GAS_PRICE).toString(),
-  gasLimit: bigNumber(TRANSACTION.GAS_LIMIT).toString(),
-  chainId: TRANSACTION.CHAIN_ID,
-  nonce: TRANSACTION.NONCE,
-  to: undefined,
-  value: bigNumber(TRANSACTION.VALUE).toString(),
-  inputData: TRANSACTION.INPUT_DATA,
-}
 
 
 export const transactionObjectValidator = ({
@@ -251,7 +242,15 @@ export const transactionObjectValidator = ({
                                              to,
                                              value = bigNumber(TRANSACTION.VALUE).toString(),
                                              inputData = TRANSACTION.INPUT_DATA,
-                                           } : TransactionObjectType = transactionObjectValidatorDefaultValue
+                                           } : TransactionObjectType = {
+                                             gasPrice: bigNumber(TRANSACTION.GAS_PRICE).toString(),
+                                             gasLimit: bigNumber(TRANSACTION.GAS_LIMIT).toString(),
+                                             chainId: TRANSACTION.CHAIN_ID,
+                                             nonce: TRANSACTION.NONCE,
+                                             to: undefined,
+                                             value: bigNumber(TRANSACTION.VALUE).toString(),
+                                             inputData: TRANSACTION.INPUT_DATA,
+                                           }
 ): TransactionObjectType => {
   /*
    * Check that the gas price is a big number
@@ -335,6 +334,22 @@ export const messageVerificationObjectValidator = ({
   };
 };
 
+
+
+/*
+export const userInputValidator = ({
+                                     firstArgument = {},
+                                     requiredEither = [],
+                                     requiredAll = [],
+                                     requiredOr = [],
+} : {
+  firstArgument: Object,
+  requiredEither?: Array<String>,
+  requiredAll?: Array<String>,
+  requiredOr?: Array<String>
+  } = {})
+ */
+
 /**
  * Check if the user provided input is in the form of an Object and it's required props
  *
@@ -346,11 +361,19 @@ export const messageVerificationObjectValidator = ({
  *
  * All the above params are sent in as props of an object.
  */
-export const userInputValidator = (firstArgument: Object,
-                                   requiredEither? : Array<String>,
-                                   requiredAll? : Array<String>,
-                                   requiredOr?: Array<String>
-                                  ) => {
+
+
+export const userInputValidator = ({
+                                     firstArgument = {},
+                                     requiredEither = [],
+                                     requiredAll = [],
+                                     requiredOr = [],
+}: {
+  firstArgument?: Object,
+  requiredEither?: Array<String>,
+  requiredAll?: Array<String>,
+  requiredOr?: Array<String>
+} = {}) => {
   const { userInputValidator: messages } = helperMessages;
   console.error(`firstArgument ${typeof  firstArgument} ${firstArgument}`, firstArgument);
   /*
