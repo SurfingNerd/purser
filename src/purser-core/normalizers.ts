@@ -1,4 +1,4 @@
-/* @flow */
+
 
 import { PATH, SPLITTER, MATCH, SIGNATURE } from './defaults';
 

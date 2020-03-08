@@ -1,4 +1,4 @@
-/* @flow */
+
 
 /*
  * Main wallet types

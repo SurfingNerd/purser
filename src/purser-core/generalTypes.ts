@@ -37,6 +37,8 @@ export type TransactionObjectType = {
     inputData: string,
 };
 
+
+
 /*
 export type WalletObjectType = {
     address: string,

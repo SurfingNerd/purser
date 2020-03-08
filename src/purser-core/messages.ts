@@ -1,4 +1,4 @@
-/* @flow */
+
 /* eslint-disable max-len */
 
 export const validators = {

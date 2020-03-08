@@ -76,3 +76,6 @@ reports
 *.patch
 .diff/
 .patch/
+
+# IDEA IDE
+.idea

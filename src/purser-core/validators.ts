@@ -40,17 +40,20 @@ export const derivationPathValidator = (derivationPath: any): boolean => {
    * chunks is not correct the `match()` method call will fail before the
    * validator generator sequence will actually start.
    */
-  assertTruth(
+  assertTruth({
     /*
      * It should be composed of (at least) four parts
      * (purpouse, coin, account, change and/or index)
      */
-    deSerializedDerivationPath.length === 4,
-    [`${derivationPathMessages.notValidParts}: [`,
+    expression: deSerializedDerivationPath.length === 4,
+    message: [
+      `${derivationPathMessages.notValidParts}: [`,
       ...deSerializedDerivationPath,
       ']',
+
     ],
-  );
+    level: 'high'
+  })
   const validationSequence = [
     {
       /*

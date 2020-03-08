@@ -1,4 +1,4 @@
-/* @flow */
+
 
 import { DerivationPathDefaultType } from './generalTypes';
 

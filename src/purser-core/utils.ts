@@ -154,20 +154,23 @@ export const getRandomValues = (
  * @return {boolean} true if the expression is valid, false otherwise (and depending on the level, throw an error
  * or just log the warning)
  */
-export const assertTruth = (
+export const assertTruth = (params :{
   expression: boolean,
   message: string| Array<string>,
-  level: string = 'high'): boolean => {
-  if (expression) {
+  level: string}): boolean => {
+  if (params.expression) {
     return true;
   }
-  if (level === 'high') {
-    throw new Error(Array.isArray(message) ? message.join(' ') : message);
+  if (params.level === undefined) {
+    params.level = 'high';
   }
-  if (Array.isArray(message)) {
-    warning(...message);
+  if (params.level === 'high') {
+    throw new Error(Array.isArray(params.message) ? params.message.join(' ') : params.message);
+  }
+  if (Array.isArray(params.message)) {
+    warning(...params.message);
   } else {
-    warning(message);
+    warning(params.message);
   }
   return false;
 };
@@ -283,12 +286,12 @@ export const validatorGenerator = (
         /*
          * If there's no message passed in, use the generic error
          */
-        validationSequence.expression,
-        validationSequence.message ?? genericError,
-        validationSequence.level ?? 'high'
+          {expression: validationSequence.expression,
+            message: validationSequence.message ?? genericError,
+            level: validationSequence.level ?? 'high'}
         ),
       ),
-    )
+    );
 
   /*
    * This is a fail-safe in case anything spills through.

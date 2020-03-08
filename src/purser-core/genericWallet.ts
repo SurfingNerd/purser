@@ -1,4 +1,4 @@
-/* @flow */
+
 
 import { computeAddress } from 'ethers/utils';
 import HDKey from 'hdkey';

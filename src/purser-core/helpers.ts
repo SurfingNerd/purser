@@ -1,4 +1,4 @@
-/* @flow */
+
 
 import { hashPersonalMessage, ecrecover } from 'ethereumjs-util';
 import Common from 'ethereumjs-common';
@@ -232,15 +232,27 @@ export const verifyMessageSignature =  ({
  *
  * @return {TransactionObjectType} The validated transaction object containing the exact passed in values
  */
+const transactionObjectValidatorDefaultValue = {
+  gasPrice: bigNumber(TRANSACTION.GAS_PRICE).toString(),
+  gasLimit: bigNumber(TRANSACTION.GAS_LIMIT).toString(),
+  chainId: TRANSACTION.CHAIN_ID,
+  nonce: TRANSACTION.NONCE,
+  to: undefined,
+  value: bigNumber(TRANSACTION.VALUE).toString(),
+  inputData: TRANSACTION.INPUT_DATA,
+}
+
+
 export const transactionObjectValidator = ({
-                                             gasPrice = bigNumber(TRANSACTION.GAS_PRICE),
-                                             gasLimit = bigNumber(TRANSACTION.GAS_LIMIT),
+                                             gasPrice = bigNumber(TRANSACTION.GAS_PRICE).toString(),
+                                             gasLimit = bigNumber(TRANSACTION.GAS_LIMIT).toString(),
                                              chainId = TRANSACTION.CHAIN_ID,
                                              nonce = TRANSACTION.NONCE,
                                              to,
-                                             value = bigNumber(TRANSACTION.VALUE),
+                                             value = bigNumber(TRANSACTION.VALUE).toString(),
                                              inputData = TRANSACTION.INPUT_DATA,
-                                           }: TransactionObjectType ): TransactionObjectType => {
+                                           } : TransactionObjectType = transactionObjectValidatorDefaultValue
+): TransactionObjectType => {
   /*
    * Check that the gas price is a big number
    */
@@ -340,6 +352,7 @@ export const userInputValidator = (firstArgument: Object,
                                    requiredOr?: Array<String>
                                   ) => {
   const { userInputValidator: messages } = helperMessages;
+  console.error(`firstArgument ${typeof  firstArgument} ${firstArgument}`, firstArgument);
   /*
    * First we check if the argument is an Object (also, not an Array)
    */
@@ -354,7 +367,7 @@ export const userInputValidator = (firstArgument: Object,
    * Check if some of the required props are available
    * Fail if none are available.
    */
-  if (requiredEither.length) {
+  if (requiredEither && requiredEither.length) {
     const availableProps: Array<boolean> = requiredEither.map(propName =>
         Object.prototype.hasOwnProperty.call(firstArgument, propName),
     );
@@ -372,23 +385,27 @@ export const userInputValidator = (firstArgument: Object,
    * Check if all required props are present.
    * Fail after the first one missing.
    */
-  requiredAll.map(propName => {
-    if (!Object.prototype.hasOwnProperty.call(firstArgument, propName)) {
-      /*
-       * Explain the arguments format (if we're in dev mode), then throw the Error
-       */
-      warning(messages.argumentsFormatExplanation);
-      throw new Error(
-          `${messages.notAllProps}: { '${requiredAll.join(`', '`)}' }`,
-      );
-    }
-    return propName;
-  });
+  if (requiredAll) {
+    requiredAll.map(propName => {
+      if (!Object.prototype.hasOwnProperty.call(firstArgument, propName)) {
+        /*
+         * Explain the arguments format (if we're in dev mode), then throw the Error
+         */
+        warning(messages.argumentsFormatExplanation);
+        throw new Error(
+            `${messages.notAllProps}: { '${requiredAll.join(`', '`)}' }`,
+        );
+      }
+      return propName;
+    });
+  }
+
   /*
    * Check if exactly one of the required props is present.
    * Fail if multiple are present.
    */
   if (
+      requiredOr &&
       requiredOr.length &&
       requiredOr.reduce(
           (acc, propName) =>

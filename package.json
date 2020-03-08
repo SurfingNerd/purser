@@ -16,11 +16,11 @@
     "lint": "eslint modules/**/*.js",
     "lint:fix": "eslint modules/**/*.js --fix",
     "lint:ci": "eslint --format junit -o reports/eslint/eslint-results.xml modules/**/*.js",
-    "test": "NODE_ENV=test jest",
+    "test": "tsc && NODE_ENV=test jest",
     "test:watch": "NODE_ENV=test jest --watchAll --verbose",
     "test:coverage": "NODE_ENV=test jest --coverage",
     "test:ci": "NODE_ENV=test jest --no-cache --ci --bail --verbose=true --maxWorkers 2 --reporters='jest-junit'",
-    "tsc": "tsc"
+    "tsc": "node scripts/build-typescript.js"
   },
   "repository": {
     "type": "git",
