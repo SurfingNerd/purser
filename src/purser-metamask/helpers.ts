@@ -2,7 +2,7 @@
 
 import { helpers as messages } from './messages';
 
-import type {
+import {
   MetamaskInpageProviderType,
   MetamaskStateEventsObserverType,
 } from './flowtypes';

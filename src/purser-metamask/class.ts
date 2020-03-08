@@ -2,28 +2,28 @@
 
 import isEqual from 'lodash.isequal';
 
-import { warning } from '@colony/purser-core/utils';
+import { warning } from '../purser-core/utils';
 import {
   recoverPublicKey as recoverPublicKeyHelper,
   userInputValidator,
-} from '@colony/purser-core/helpers';
+} from '../purser-core/helpers';
 import {
   addressValidator,
   hexSequenceValidator,
-} from '@colony/purser-core/validators';
-import { hexSequenceNormalizer } from '@colony/purser-core/normalizers';
+} from '../purser-core/validators';
+import { hexSequenceNormalizer } from '../purser-core/normalizers';
 
 import {
   DESCRIPTORS,
   HEX_HASH_TYPE,
   REQUIRED_PROPS,
-} from '@colony/purser-core/defaults';
-import { TYPE_SOFTWARE, SUBTYPE_METAMASK } from '@colony/purser-core/types';
+} from '../purser-core/defaults';
+import { TYPE_SOFTWARE, SUBTYPE_METAMASK } from '../purser-core/types';
 
-import type {
+import {
   TransactionObjectType,
   MessageVerificationObjectType,
-} from '@colony/purser-core/flowtypes';
+} from '../purser-core/pursercoretypes';
 
 import { signTransaction, signMessage, verifyMessage } from './staticMethods';
 import { methodCaller, setStateEventObserver } from './helpers';
@@ -36,7 +36,7 @@ import {
   staticMethods as staticMethodsMessages,
 } from './messages';
 
-import type { MetamaskWalletConstructorArgumentsType } from './flowtypes';
+import { MetamaskWalletConstructorArgumentsType } from './flowtypes';
 
 const { SETTERS, GETTERS, GENERIC_PROPS, WALLET_PROPS } = DESCRIPTORS;
 

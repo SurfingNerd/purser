@@ -4,24 +4,24 @@ import { Transaction as EthereumTx } from 'ethereumjs-tx';
 import BigNumber from 'bn.js';
 import { awaitTx } from 'await-transaction-mined';
 
-import { warning } from '@colony/purser-core/utils';
+import { warning } from '../purser-core/utils';
 import {
   hexSequenceValidator,
   addressValidator,
   safeIntegerValidator,
-} from '@colony/purser-core/validators';
+} from '../purser-core/validators';
 import {
   addressNormalizer,
   hexSequenceNormalizer,
-} from '@colony/purser-core/normalizers';
+} from '../purser-core/normalizers';
 import {
   transactionObjectValidator,
   messageVerificationObjectValidator,
   messageOrDataValidator,
   getChainDefinition,
-} from '@colony/purser-core/helpers';
+} from '../purser-core/helpers';
 
-import { HEX_HASH_TYPE } from '@colony/purser-core/defaults';
+import { HEX_HASH_TYPE } from '../purser-core/defaults';
 
 import { methodCaller } from './helpers';
 import {
@@ -34,7 +34,7 @@ import {
 import { STD_ERRORS } from './defaults';
 import { staticMethods as messages } from './messages';
 
-import type { Web3TransactionType } from './flowtypes';
+import { Web3TransactionType } from './flowtypes';
 
 /**
  * Get a transaction, with a workaround for some providers not returning

@@ -28,7 +28,7 @@ import {
   DerivationPathObjectType,
   TransactionObjectType,
   MessageVerificationObjectType,
-} from './generalTypes';
+} from './pursercoretypes';
 
 /**
  * Serialize an derivation path object's props into it's string counterpart

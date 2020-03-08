@@ -1,6 +1,6 @@
 /* @flow */
 
-import type {
+import {
   getTransactionMethodType,
   signMessageMethodType,
   signTrasactionMethodType,

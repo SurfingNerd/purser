@@ -2,7 +2,7 @@
 
 import Web3Instance from 'web3';
 
-import { warning } from '@colony/purser-core/utils';
+import { warning } from '../purser-core/utils';
 
 import MetamaskWallet from './class';
 import {
@@ -14,7 +14,7 @@ import {
 
 import { staticMethods as messages } from './messages';
 
-import type {
+import {
   MetamaskInpageProviderType,
   MetamaskStateEventsObserverType,
 } from './flowtypes';

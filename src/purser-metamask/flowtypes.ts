@@ -1,6 +1,6 @@
 /* @flow */
 
-import type BigNumber from 'bn.js';
+import BigNumber from 'bn.js';
 
 export type MetamaskInpageProviderType = {
   enable: () => Promise<Array<string>>,
