@@ -375,7 +375,6 @@ export const userInputValidator = ({
   requiredOr?: Array<String>
 } = {}) => {
   const { userInputValidator: messages } = helperMessages;
-  console.error(`firstArgument ${typeof  firstArgument} ${firstArgument}`, firstArgument);
   /*
    * First we check if the argument is an Object (also, not an Array)
    */
