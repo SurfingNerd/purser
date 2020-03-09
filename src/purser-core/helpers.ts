@@ -2,6 +2,8 @@
 
 import { hashPersonalMessage, ecrecover } from 'ethereumjs-util';
 import Common from 'ethereumjs-common';
+import { TransactionOptions } from 'ethereumjs-tx';
+
 
 import {
   safeIntegerValidator,
@@ -469,7 +471,7 @@ export const messageOrDataValidator = (
  * @param {number} chainId The given chain ID (as defined in EIP-155)
  * @return {Object} The common chain definition
  */
-export const getChainDefinition = (chainId: number): { common: Object  } => {
+export const getChainDefinition = (chainId: number): TransactionOptions  => {
 
     let baseChain : string;
 

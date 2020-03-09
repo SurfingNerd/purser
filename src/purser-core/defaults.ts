@@ -160,7 +160,7 @@ export const HARDFORKS = {
 /*
  * Prop names used to validate user input against
  */
-export const REQUIRED_PROPS: Object = {
+export const REQUIRED_PROPS = {
   /*
    * Exactly one of these
    */

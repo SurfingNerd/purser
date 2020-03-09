@@ -8,5 +8,8 @@
     "target": "es6",
     "outDir": "./modules/node_modules/@colony",
     "esModuleInterop": true,
-  }
+  },
+    "exclude": [
+        "temp"
+    ]
 }

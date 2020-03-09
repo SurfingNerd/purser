@@ -34,20 +34,21 @@ export const open = async (): Promise<MetamaskWallet> => {
      * We're on the Modern Metamask (after EIP-1102)
      * See: https://eips.ethereum.org/EIPS/eip-1102
      */
-    if (global.ethereum) {
+    var anyGlobal: any = global;
+    if (anyGlobal.ethereum) {
       /*
        * Inject the web3 provider
        */
-      global.web3 = new Web3Instance(global.ethereum);
+      anyGlobal.web3 = new Web3Instance(anyGlobal.ethereum);
       /*
        * Enable it
        */
-      [ addressAfterEnable ] = await global.ethereum.enable();
+      [ addressAfterEnable ] = await anyGlobal.ethereum.enable();
     }
     /*
      * We're on the legacy version of Metamask
      */
-    if (!global.ethereum && global.web3) {
+    if (!anyGlobal.ethereum && anyGlobal.web3) {
       /*
        * Warn the user about legacy mode
        *
@@ -66,7 +67,7 @@ export const open = async (): Promise<MetamaskWallet> => {
       /*
        * Inject the web3 provider (overwrite the current one)
        */
-      global.web3 = new Web3Instance(legacyProvider);
+      anyGlobal.web3 = new Web3Instance(legacyProvider);
     }
     /*
      * Everything functions the same since the Web3 instance is now in place

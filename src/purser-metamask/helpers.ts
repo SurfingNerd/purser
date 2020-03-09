@@ -22,7 +22,9 @@ export const detect = async (): Promise<boolean> => {
   /*
    * Modern Metamask Version
    */
-  if (global.ethereum) {
+  var anyGlobal : any = global;
+
+  if (anyGlobal.ethereum) {
     /*
      * @NOTE This is a temporary failsafe check, since Metmask is running an
      * intermediate version which, while it contains most of the `ethereum`
@@ -31,7 +33,7 @@ export const detect = async (): Promise<boolean> => {
      * @TODO Remove legacy metmask object availability check
      * After an adequate amount of time has passed
      */
-    if (global.ethereum.isUnlocked && !(await global.ethereum.isUnlocked())) {
+    if (anyGlobal.ethereum.isUnlocked && !(await anyGlobal.ethereum.isUnlocked())) {
       throw new Error(messages.isLocked);
     }
     /*
@@ -42,7 +44,7 @@ export const detect = async (): Promise<boolean> => {
      * @TODO Remove legacy metmask object availability check
      * After an adequate amount of time has passed
      */
-    if (global.ethereum.isEnabled && !(await global.ethereum.isEnabled())) {
+    if (anyGlobal.ethereum.isEnabled && !(await anyGlobal.ethereum.isEnabled())) {
       throw new Error(messages.notEnabled);
     }
     /*
@@ -55,19 +57,19 @@ export const detect = async (): Promise<boolean> => {
   /*
    * Legacy Metamask Version
    */
-  if (!global.ethereum && global.web3) {
+  if (!anyGlobal.ethereum && anyGlobal.web3) {
     if (
-      !global.web3.currentProvider ||
-      !global.web3.currentProvider.publicConfigStore
+      !anyGlobal.web3.currentProvider ||
+      !anyGlobal.web3.currentProvider.publicConfigStore
     ) {
       throw new Error(messages.noInpageProvider);
     }
     /* eslint-disable-next-line no-underscore-dangle */
-    if (!global.web3.currentProvider.publicConfigStore._state) {
+    if (!anyGlobal.web3.currentProvider.publicConfigStore._state) {
       throw new Error(messages.noProviderState);
     }
     /* eslint-disable-next-line no-underscore-dangle */
-    if (!global.web3.currentProvider.publicConfigStore._state.selectedAddress) {
+    if (!anyGlobal.web3.currentProvider.publicConfigStore._state.selectedAddress) {
       throw new Error(messages.notEnabled);
     }
     return true;
@@ -127,10 +129,11 @@ export const getInpageProvider = (): MetamaskInpageProviderType => {
    *
    * See: https://github.com/facebook/jest/issues/936
    */
-  if (global.ethereum) {
-    return global.ethereum;
+  var anyGlobal: any = global;
+  if (anyGlobal.ethereum) {
+    return anyGlobal.ethereum;
   }
-  return global.web3.currentProvider;
+  return anyGlobal.web3.currentProvider;
 };
 
 /**
@@ -156,6 +159,7 @@ export const setStateEventObserver = (
      */
     /* eslint-disable-next-line no-use-before-define */
     metamaskHelpers.getInpageProvider();
+
   return stateEvents.update.push(observer);
 };
 
@@ -163,7 +167,7 @@ export const setStateEventObserver = (
  * This default export is only here to help us with testing, otherwise
  * it wound't be needed
  */
-const metamaskHelpers: Object = {
+const metamaskHelpers = {
   detect,
   methodCaller,
   getInpageProvider,

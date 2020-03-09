@@ -1,7 +1,6 @@
-/* @flow */
 /* eslint-disable max-len */
 
-export const staticMethods: Object = {
+export const staticMethods = {
   metamaskNotAvailable:
     "Metamask extension could not be accessed. Please ensure that it is enabled and it's not locked",
   cannotSendTransaction:
@@ -26,7 +25,7 @@ export const staticMethods: Object = {
   cannotAddHook: "Cannot add an Account Change Hook to the injected Metamask Instance. This should have been caught by the 'detect()' method. Since it didn't it means some API's might have changed."
 };
 
-export const helpers: Object = {
+export const helpers = {
   noExtension: "Could not detect the Metamask extension. Ensure that it's enabled",
   isLocked: "Metamask's instance is locked. Please unlock it from the UI",
   notEnabled:
@@ -43,7 +42,7 @@ export const helpers: Object = {
      "Metamask's in-page provider does not contain the state. Ensure something is not tampering with the web3 Proxy instance",
 };
 
-export const validators: Object = {
+export const validators = {
   noState:
     'The state object does not exist. Check the injected Metamask in-page provider',
   noStateAddress:
@@ -52,7 +51,7 @@ export const validators: Object = {
     'The state object is not a valid Metamask format. It does not contain the chain id',
 };
 
-export const MetamaskWallet: Object = {
+export const MetamaskWallet = {
   cannotObserve:
     'Cannot listen for Metamask changes. Make sure the Metamask extension is available',
   cannotGetPublicKey:

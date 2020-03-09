@@ -1,5 +1,3 @@
-/* @flow */
-
 import isEqual from 'lodash.isequal';
 
 import { warning } from '../purser-core/utils';
@@ -49,11 +47,6 @@ let internalPublicKey: string | void;
 export default class MetamaskWallet {
   address: string;
 
-  /*
-   * `publicKey` prop is a getter
-   */
-  publicKey: Promise<string>;
-
   type: string;
 
   subtype: string;
@@ -64,11 +57,11 @@ export default class MetamaskWallet {
    * See the core generic wallet for this, since that will implement them.
    * This will just use the ones declared there.
    */
-  sign: (...*) => Promise<string>;
+  sign: (...any) => Promise<string>;
 
-  signMessage: (...*) => Promise<string>;
+  signMessage: (...any) => Promise<string>;
 
-  verifyMessage: (...*) => Promise<boolean>;
+  verifyMessage: (...any) => Promise<boolean>;
 
   constructor({ address }: MetamaskWalletConstructorArgumentsType) {
     /*
@@ -105,7 +98,7 @@ export default class MetamaskWallet {
       signMessage: Object.assign(
         {},
         {
-          value: async (messageObject: Object = {}) => {
+          value: async (messageObject: any= {}) => {
             /*
              * Validate the trasaction's object input
              */
@@ -168,7 +161,7 @@ export default class MetamaskWallet {
            * @TODO Move into own (non-anonymous) method
            * This way we could better test it
            */
-          (newState: Object): boolean => {
+          (newState: any): boolean => {
             try {
               /*
                * Validate the state object that's coming in.
@@ -312,6 +305,6 @@ export default class MetamaskWallet {
  * We need to use `defineProperties` to make props enumerable.
  * When adding them via a `Class` getter/setter it will prevent that by default
  */
-Object.defineProperties((MetamaskWallet: any).prototype, {
+Object.defineProperties(MetamaskWallet.prototype, {
   publicKey: GETTERS,
 });

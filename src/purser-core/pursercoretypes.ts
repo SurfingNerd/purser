@@ -32,6 +32,7 @@ export type TransactionObjectType = {
     gasPrice: string,
     gasLimit: string,
     nonce: number,
+    from?: string,
     to?: string,
     value: string,
     inputData: string,

@@ -6,8 +6,8 @@ export type MetamaskInpageProviderType = {
   enable: () => Promise<Array<string>>,
   mux: Object,
   publicConfigStore: {
-    _events: Object,
-    _state: Object,
+    _events: any,
+    _state: any,
   },
   rpcEngine: Object,
 };
