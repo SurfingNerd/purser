@@ -14,6 +14,8 @@ export const staticMethods = {
     'Cannot sign the message. Make sure the Metamask extension is available',
   didNotAuthorize:
     'The user did not authorize opening of the Metamask account (via Metamask UI)',
+  signMessageArgumentMissing:
+    'signMessage({}) function requires on object typed argument.',
   /*
    * Legacy Metamask Version
    *

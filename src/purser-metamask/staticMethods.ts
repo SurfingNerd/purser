@@ -34,6 +34,7 @@ import { staticMethods as messages } from './messages';
 
 import { Web3TransactionType } from './flowtypes';
 import {MessageVerificationObjectType, TransactionObjectType} from "../purser-core/pursercoretypes";
+import {throwError} from "ethers/errors";
 
 /**
  * Get a transaction, with a workaround for some providers not returning
@@ -274,6 +275,7 @@ export const signMessageCallback = (
     }
   };
 
+
 /**
  * Sign a message and return the signature. Useful for verifying identities.
  *
@@ -287,49 +289,51 @@ export const signMessageCallback = (
  *
  * @return {Promise<string>} The signed message `hex` string (wrapped inside a `Promise`)
  */
-export const signMessage = async ({
-  currentAddress,
-  message,
-  messageData,
-} : {
+export const signMessage = async (obj : {
     currentAddress: string,
     message : string,
     messageData: any
 }): Promise<string | void> => {
-  addressValidator(currentAddress);
-  const toSign = messageOrDataValidator({ message, messageData });
-  /*
-   * We must check for the Metamask injected in-page proxy every time we
-   * try to access it. This is because something can change it from the time
-   * of last detection until now.
-   */
-  return methodCaller(
+
+    if (obj === null || typeof obj !== 'object'){
+        throw new Error(messages.signMessageArgumentMissing);
+    }
+    const { currentAddress, message, messageData } = obj;
+
+    addressValidator(currentAddress);
+    const toSign = messageOrDataValidator({ message, messageData });
     /*
-     * @TODO Move into own (non-anonymous) method
-     * This way we could better test it
+     * We must check for the Metamask injected in-page proxy every time we
+     * try to access it. This is because something can change it from the time
+     * of last detection until now.
      */
-    () =>
-      new Promise((resolve, reject) => {
+    return methodCaller(
         /*
-         * Sign the message. This will prompt the user via Metamask's UI
+         * @TODO Move into own (non-anonymous) method
+         * This way we could better test it
          */
-        signMessageMethodLink(
-          /*
-           * Ensure the hex string has the `0x` prefix
-           */
-          hexSequenceNormalizer(
-            /*
-             * We could really do with default Flow types for Buffer...
-             */
-            /* $FlowFixMe */
-            Buffer.from(toSign).toString(HEX_HASH_TYPE),
-          ),
-          currentAddress,
-          signMessageCallback(resolve, reject),
-        );
-      }),
-    messages.cannotSignMessage,
-  );
+        () =>
+            new Promise((resolve, reject) => {
+                /*
+                 * Sign the message. This will prompt the user via Metamask's UI
+                 */
+                signMessageMethodLink(
+                    /*
+                     * Ensure the hex string has the `0x` prefix
+                     */
+                    hexSequenceNormalizer(
+                        /*
+                         * We could really do with default Flow types for Buffer...
+                         */
+                        /* $FlowFixMe */
+                        Buffer.from(toSign).toString(HEX_HASH_TYPE),
+                    ),
+                    currentAddress,
+                    signMessageCallback(resolve, reject),
+                );
+            }),
+        messages.cannotSignMessage,
+    );
 };
 
 export const verifyMessageCallback = (

@@ -16,10 +16,10 @@ export const validateMetamaskState = (stateObject: Object): boolean => {
   if (!stateObject || typeof stateObject !== 'object') {
     throw new Error(messages.noState);
   }
-  if (!stateObject.selectedAddress) {
+  if (!stateObject['selectedAddress']) {
     throw new Error(messages.noStateAddress);
   }
-  if (!stateObject.networkVersion) {
+  if (!stateObject['networkVersion']) {
     throw new Error(messages.noStateNetwork);
   }
   return true;
