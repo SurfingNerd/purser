@@ -177,12 +177,12 @@ export const safeIntegerValidator = (integer: number): boolean => {
  *
  * @method bigNumberValidator
  *
- * @param {Object} bigNumber The big number instance to check
+ * @param {any} bigNumber The big number instance to check
  *
  * @return {boolean} It only returns true if the object is an instance of Big Number,
  * otherwise an Error will be thrown and this will not finish execution.
  */
-export const bigNumberValidator = (bigNumber: object): boolean => {
+export const bigNumberValidator = (bigNumber: any): boolean => {
   const { bigNumber: bigNumberMessages } = messages;
   const validationSequence = [
     {
