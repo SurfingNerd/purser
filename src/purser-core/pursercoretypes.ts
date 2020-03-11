@@ -27,16 +27,23 @@ export type GenericClassArgumentsType = {
     chainId?: number,
 };
 
-export type TransactionObjectType = {
+export interface TransactionObjectType {
     chainId: number,
     gasPrice: string,
     gasLimit: string,
     nonce: number,
-    from?: string,
-    to?: string,
     value: string,
     inputData: string,
 };
+
+
+export interface TransactionObjectTypeWithTo extends TransactionObjectType {
+    to: string | undefined
+}
+
+export interface TransactionObjectTypeWithAddresses extends TransactionObjectTypeWithTo {
+    from: string | undefined
+}
 
 
 
