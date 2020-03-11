@@ -75,8 +75,10 @@ export interface TransactionObjectTypeWithAddresses extends TransactionObjectTyp
   from: string | undefined
 }
 
-
-
+export interface SignMessageData {
+  message: any,
+  messageData: any
+}
 
 /*
 export type WalletObjectType = {

@@ -21,7 +21,10 @@ the dom module was required for using the crypto functionality of windows
 esModuleInterop is required for the BN.js library. see: https://github.com/CodeChain-io/codechain-primitives-js/issues/68
 
 
+### Internal references
 
+used to be `@colony/purser-core` - now they are `../purser-core`.
+need to figure out how to do better.
 
 
 ## Known Issues
