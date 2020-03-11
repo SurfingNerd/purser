@@ -16,7 +16,7 @@ import { PATH, MATCH, UNDEFINED, SPLITTER } from './defaults';
  * @return {boolean} It only returns true if the derivation path is correct,
  * otherwise an Error will be thrown and this will not finish execution.
  */
-export const derivationPathValidator = (derivationPath: any): boolean => {
+export const derivationPathValidator = (derivationPath: string): boolean => {
   const { derivationPath: derivationPathMessages } = messages;
   const { COIN_MAINNET, COIN_TESTNET } = PATH;
   let deSerializedDerivationPath: Array<string>;
@@ -139,7 +139,7 @@ export const derivationPathValidator = (derivationPath: any): boolean => {
  * @return {boolean} It only returns true if the integer is safe and positive,
  * otherwise an Error will be thrown and this will not finish execution.
  */
-export const safeIntegerValidator = (integer: any): boolean => {
+export const safeIntegerValidator = (integer: number): boolean => {
   const { safeInteger: safeIntegerMessages } = messages;
   const validationSequence = [
     {
@@ -182,7 +182,7 @@ export const safeIntegerValidator = (integer: any): boolean => {
  * @return {boolean} It only returns true if the object is an instance of Big Number,
  * otherwise an Error will be thrown and this will not finish execution.
  */
-export const bigNumberValidator = (bigNumber: any): boolean => {
+export const bigNumberValidator = (bigNumber: object): boolean => {
   const { bigNumber: bigNumberMessages } = messages;
   const validationSequence = [
     {
@@ -213,7 +213,7 @@ export const bigNumberValidator = (bigNumber: any): boolean => {
  * @return {boolean} It only returns true if the string is a valid address format,
  * otherwise an Error will be thrown and this will not finish execution.
  */
-export const addressValidator = (address: any): boolean => {
+export const addressValidator = (address: string): boolean => {
   const { address: addressMessages } = messages;
   let addressLength = 0;
   try {
@@ -268,7 +268,7 @@ export const addressValidator = (address: any): boolean => {
  * @return {boolean} It only returns true if the string is a valid hex format,
  * otherwise an Error will be thrown and this will not finish execution.
  */
-export const hexSequenceValidator = (hexSequence: any): boolean => {
+export const hexSequenceValidator = (hexSequence: string): boolean => {
   const { hexSequence: hexSequenceMessages } = messages;
   const validationSequence = [
     {
@@ -304,7 +304,7 @@ export const hexSequenceValidator = (hexSequence: any): boolean => {
  * @return {boolean} It only returns true if the string is a valid format,
  * otherwise an Error will be thrown and this will not finish execution.
  */
-export const messageValidator = (string: any): boolean => {
+export const messageValidator = (string: string): boolean => {
   /*
    * Real creative naming there, huh...?
    */
