@@ -20,7 +20,7 @@
     "test:watch": "NODE_ENV=test jest --watchAll --verbose",
     "test:coverage": "NODE_ENV=test jest --coverage",
     "test:ci": "NODE_ENV=test jest --no-cache --ci --bail --verbose=true --maxWorkers 2 --reporters='jest-junit'",
-    "tsc": "node scripts/build-typescript.js"
+    "tsc": "tsc"
   },
   "repository": {
     "type": "git",

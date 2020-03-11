@@ -36,7 +36,7 @@ esModuleInterop is required for the BN.js library. see: https://github.com/CodeC
 
 ## TransactionObjectType
 
-TransactionObjectType could be replaced with the less restrictive eth-core type TransactionConfig,
+maybe TransactionObjectType could be replaced with the less restrictive eth-core type TransactionConfig,
 
 ´´´
 export interface TransactionConfig {
@@ -50,14 +50,6 @@ export interface TransactionConfig {
     chainId?: number;
 }
 ´´´
-
-## Metamask signTransaction
-
-signTransaction has been changed to use `TransactionObjectType`,
-and `TransactionObjectType` has been extented by an optional 'from' field.
-
-`manualNonce` was interprated an and validated before.
-But Metamask does ignore `manualNonce` anyway.
 
 ## Should be tested
 - support for msCrypto (Edge browser)

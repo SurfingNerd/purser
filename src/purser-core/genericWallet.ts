@@ -12,9 +12,7 @@ import { addressNormalizer, hexSequenceNormalizer } from './normalizers';
 
 import { genericClass as messages } from './messages';
 import { HEX_HASH_TYPE, DESCRIPTORS, SPLITTER, CHAIN_IDS } from './defaults';
-import { TYPE_GENERIC, SUBTYPE_GENERIC } from './types';
-
-import { GenericClassArgumentsType } from './pursercoretypes';
+import { TYPE_GENERIC, SUBTYPE_GENERIC, GenericClassArgumentsType } from './types';
 
 
 //const { GETTERS, SETTERS, WALLET_PROPS, GENERIC_PROPS } = DESCRIPTORS;

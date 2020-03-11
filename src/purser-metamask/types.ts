@@ -1,4 +1,3 @@
-/* @flow */
 
 import BigNumber from 'bn.js';
 

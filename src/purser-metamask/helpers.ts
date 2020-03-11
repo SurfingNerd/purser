@@ -5,7 +5,7 @@ import { helpers as messages } from './messages';
 import {
   MetamaskInpageProviderType,
   MetamaskStateEventsObserverType,
-} from './flowtypes';
+} from './types';
 
 /*
  * @TODO Add isModern() helper method to detect the new version of Metamask

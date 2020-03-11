@@ -1,6 +1,6 @@
 
 
-import { DerivationPathDefaultType } from './pursercoretypes';
+import { DerivationPathDefaultType } from './types';
 
 /*
  * Build environment

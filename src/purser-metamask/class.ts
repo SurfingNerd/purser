@@ -20,8 +20,8 @@ import { TYPE_SOFTWARE, SUBTYPE_METAMASK } from '../purser-core/types';
 
 import {
   TransactionObjectType,
-  MessageVerificationObjectType,
-} from '../purser-core/pursercoretypes';
+  MessageVerificationObjectType, TransactionObjectTypeWithAddresses,
+} from '../purser-core/types';
 
 import { signTransaction, signMessage, verifyMessage } from './staticMethods';
 import { methodCaller, setStateEventObserver } from './helpers';
@@ -34,7 +34,7 @@ import {
   staticMethods as staticMethodsMessages,
 } from './messages';
 
-import { MetamaskWalletConstructorArgumentsType } from './flowtypes';
+import { MetamaskWalletConstructorArgumentsType } from './types';
 
 const { SETTERS, GETTERS, GENERIC_PROPS, WALLET_PROPS } = DESCRIPTORS;
 
@@ -81,7 +81,7 @@ export default class MetamaskWallet {
       sign: Object.assign(
         {},
         {
-          value: async (transactionObject: TransactionObjectType) => {
+          value: async (transactionObject: TransactionObjectTypeWithAddresses) => {
             /*
              * Validate the trasaction's object input
              */

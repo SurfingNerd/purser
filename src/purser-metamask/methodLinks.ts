@@ -5,7 +5,7 @@ import {
   signMessageMethodType,
   signTrasactionMethodType,
   verifyMessageMethodType,
-} from './flowtypes';
+} from './types';
 
 /*
  * This is just to provide a nicer function name to the injected metamask

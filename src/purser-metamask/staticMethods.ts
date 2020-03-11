@@ -32,8 +32,12 @@ import {
 import { STD_ERRORS } from './defaults';
 import { staticMethods as messages } from './messages';
 
-import { Web3TransactionType } from './flowtypes';
-import {MessageVerificationObjectType, TransactionObjectType} from "../purser-core/pursercoretypes";
+import { Web3TransactionType } from './types';
+import {
+    MessageVerificationObjectType,
+    TransactionObjectTypeWithAddresses,
+    TransactionObjectTypeWithTo
+} from "../purser-core/types";
 import {throwError} from "ethers/errors";
 
 /**
@@ -170,9 +174,20 @@ export const signTransactionCallback = (
  *
  * @return {Promise<string>} the hex signature string
  */
-export const signTransaction = async (transactionObject: TransactionObjectType): Promise<string | void> => {
+export const signTransaction = async (obj: TransactionObjectTypeWithAddresses): Promise<string | void> => {
+
+  const transactionObject : TransactionObjectTypeWithTo =
+      {
+          chainId: obj.chainId,
+          gasPrice: obj.gasPrice,
+          gasLimit: obj.gasLimit,
+          nonce: obj.nonce,
+          value: obj.value,
+          inputData: obj.inputData,
+          to: obj.to
+      };
+  const manualNonce = transactionObject.nonce;
   const {
-    from,
     chainId,
     gasPrice,
     gasLimit,
@@ -181,6 +196,8 @@ export const signTransaction = async (transactionObject: TransactionObjectType):
     inputData,
     nonce
   } = transactionObjectValidator(transactionObject);
+  const { from } = obj;
+
   addressValidator(from);
   /*
    * Metamask auto-sets the nonce based on the next one available. You can manually
@@ -192,11 +209,10 @@ export const signTransaction = async (transactionObject: TransactionObjectType):
    * We also notify (in dev mode) the user about not setting the nonce.
    */
 
-  //TODO: fix manualNonce
-  /*if (manualNonce) {
+  if (manualNonce) {
     safeIntegerValidator(manualNonce);
     warning(messages.dontSetNonce);
-  }*/
+  }
 
   /*
    * We must check for the Metamask injected in-page proxy every time we

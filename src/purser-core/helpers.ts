@@ -30,7 +30,8 @@ import {
   DerivationPathObjectType,
   TransactionObjectType,
   MessageVerificationObjectType,
-} from './pursercoretypes';
+  TransactionObjectTypeWithTo
+} from './types';
 
 /**
  * Serialize an derivation path object's props into it's string counterpart
@@ -244,7 +245,7 @@ export const transactionObjectValidator = ({
                                              to,
                                              value = bigNumber(TRANSACTION.VALUE).toString(),
                                              inputData = TRANSACTION.INPUT_DATA,
-                                           } : TransactionObjectType = {
+                                           } : TransactionObjectTypeWithTo = {
                                              gasPrice: bigNumber(TRANSACTION.GAS_PRICE).toString(),
                                              gasLimit: bigNumber(TRANSACTION.GAS_LIMIT).toString(),
                                              chainId: TRANSACTION.CHAIN_ID,
@@ -253,7 +254,7 @@ export const transactionObjectValidator = ({
                                              value: bigNumber(TRANSACTION.VALUE).toString(),
                                              inputData: TRANSACTION.INPUT_DATA,
                                            }
-): TransactionObjectType => {
+): TransactionObjectTypeWithTo => {
   /*
    * Check that the gas price is a big number
    */

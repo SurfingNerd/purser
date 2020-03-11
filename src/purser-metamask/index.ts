@@ -17,7 +17,7 @@ import { staticMethods as messages } from './messages';
 import {
   MetamaskInpageProviderType,
   MetamaskStateEventsObserverType,
-} from './flowtypes';
+} from './types';
 
 /**
  * Open the Metamask Wallet instance
