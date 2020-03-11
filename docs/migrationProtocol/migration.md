@@ -51,5 +51,13 @@ export interface TransactionConfig {
 }
 ´´´
 
+## Metamask signTransaction
+
+signTransaction has been changed to use `TransactionObjectType`,
+and `TransactionObjectType` has been extented by an optional 'from' field.
+
+`manualNonce` was interprated an and validated before.
+But Metamask does ignore `manualNonce` anyway.
+
 ## Should be tested
 - support for msCrypto (Edge browser)

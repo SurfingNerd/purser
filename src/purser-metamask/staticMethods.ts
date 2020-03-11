@@ -1,6 +1,4 @@
-/* @flow */
-
-import { Transaction as EthereumTx } from 'ethereumjs-tx';
+import { Transaction as EthereumTx, TransactionOptions } from 'ethereumjs-tx';
 import BigNumber from 'bn.js';
 import { awaitTx } from 'await-transaction-mined';
 
@@ -35,6 +33,7 @@ import { STD_ERRORS } from './defaults';
 import { staticMethods as messages } from './messages';
 
 import { Web3TransactionType } from './flowtypes';
+import {MessageVerificationObjectType, TransactionObjectType} from "../purser-core/pursercoretypes";
 
 /**
  * Get a transaction, with a workaround for some providers not returning
@@ -55,7 +54,7 @@ import { Web3TransactionType } from './flowtypes';
 export const getTransaction = async (
   transactionHash: string,
 ): Promise<Web3TransactionType> => {
-  const receiptPromise = awaitTx(global.web3, transactionHash, {
+  const receiptPromise = awaitTx((global as any).web3, transactionHash, {
     blocksToWait: 1,
   });
 
@@ -128,8 +127,12 @@ export const signTransactionCallback = (
           v,
           value: new BigNumber(signedValue),
         },
+        //new class implements TransactionOptions {}
         getChainDefinition(chainId),
       );
+
+      const to : TransactionOptions = {};
+
       const serializedSignedTransaction = signedTransaction
         .serialize()
         .toString(HEX_HASH_TYPE);
@@ -166,18 +169,16 @@ export const signTransactionCallback = (
  *
  * @return {Promise<string>} the hex signature string
  */
-export const signTransaction = async ({
-  from,
-  nonce: manualNonce,
-  ...transactionObject
-}: Object = {}): Promise<string | void> => {
+export const signTransaction = async (transactionObject: TransactionObjectType): Promise<string | void> => {
   const {
+    from,
     chainId,
     gasPrice,
     gasLimit,
     to,
     value,
     inputData,
+    nonce
   } = transactionObjectValidator(transactionObject);
   addressValidator(from);
   /*
@@ -189,10 +190,13 @@ export const signTransaction = async ({
    *
    * We also notify (in dev mode) the user about not setting the nonce.
    */
-  if (manualNonce) {
+
+  //TODO: fix manualNonce
+  /*if (manualNonce) {
     safeIntegerValidator(manualNonce);
     warning(messages.dontSetNonce);
-  }
+  }*/
+
   /*
    * We must check for the Metamask injected in-page proxy every time we
    * try to access it. This is because something can change it from the time
@@ -222,7 +226,7 @@ export const signTransaction = async ({
               /*
                * Most likely this value is `undefined`, but that is good (see above)
                */
-              nonce: manualNonce,
+              nonce: nonce,
             },
             /*
              * Only send (and normalize) the destination address if one was
@@ -238,7 +242,7 @@ export const signTransaction = async ({
 };
 
 export const signMessageCallback = (
-  resolve: (string | void) => void,
+  resolve: (string) => void,
   reject: (Error) => void,
 ) =>
   (error: Error, messageSignature: string) => {
@@ -287,7 +291,11 @@ export const signMessage = async ({
   currentAddress,
   message,
   messageData,
-}: Object = {}): Promise<string | void> => {
+} : {
+    currentAddress: string,
+    message : string,
+    messageData: any
+}): Promise<string | void> => {
   addressValidator(currentAddress);
   const toSign = messageOrDataValidator({ message, messageData });
   /*
@@ -372,20 +380,21 @@ export const verifyMessageCallback = (
  *
  * @return {Promise<boolean>} A boolean to indicate if the message/signature pair are valid (wrapped inside a `Promise`)
  */
-export const verifyMessage = async ({
-  currentAddress,
-  ...messageVerificationObject
-}: Object = {}) => {
+export const verifyMessage = async (obj: { message: string, signature: string, currentAddress: string}) => {
+
+  const {currentAddress} = obj;
+  const messageVerificationObject = { message: obj.message, signature: obj.signature };
+
   /*
    * Validate the current address
    */
   addressValidator(currentAddress);
+
   /*
    * Validate the rest of the pros using the core helper
    */
-  const { message, signature } = messageVerificationObjectValidator(
-    messageVerificationObject,
-  );
+  const { message, signature } = messageVerificationObjectValidator(messageVerificationObject);
+
   /*
    * We must check for the Metamask injected in-page proxy every time we
    * try to access it. This is because something can change it from the time
