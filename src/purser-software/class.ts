@@ -21,7 +21,7 @@ import {
   REQUIRED_PROPS,
 } from '../purser-core/defaults';
 
-import { TYPE_SOFTWARE, SUBTYPE_ETHERS, WalletArgumentsType, TransactionObjectType, SignMessageData, MessageVerificationObjectType } from '../purser-core/types';
+import { TYPE_SOFTWARE, SUBTYPE_ETHERS, WalletArgumentsType, TransactionObjectTypeWithTo, SignMessageData, MessageVerificationObjectType } from '../purser-core/types';
 
 import { signTransaction, signMessage, verifyMessage } from './staticMethods';
 
@@ -49,7 +49,7 @@ let internalEncryptionPassword: string | void;
 export default class SoftwareWallet {
   address: string;
 
-  privateKey: string;
+  privateKey: Promise<string>;
 
   originalMnemonic: string;
 
@@ -126,7 +126,7 @@ export default class SoftwareWallet {
       sign: Object.assign(
         {},
         {
-          value: async (transactionObject: TransactionObjectType) => {
+          value: async (transactionObject: TransactionObjectTypeWithTo) => {
             /*
              * Validate the trasaction's object input
              */
@@ -135,6 +135,9 @@ export default class SoftwareWallet {
             });
             const { chainId: transactionChainId = this.chainId } =
               transactionObject || {};
+
+            const callbackToUse : (transaction: any) => string = ethersSign.bind(ethersInstance);
+
             return signTransaction(
               Object.assign({}, transactionObject, {
                 chainId: transactionChainId,
@@ -145,7 +148,7 @@ export default class SoftwareWallet {
                  * class's prototype, and if it fails to find them, it will
                  * crash
                  */
-                callback: ethersSign.bind(ethersInstance),
+                callback: callbackToUse,
               }),
             );
           },
@@ -280,9 +283,9 @@ export default class SoftwareWallet {
    * after the wallet has be created / instantiated.
    */
   /* eslint-disable-next-line class-methods-use-this */
-  set keystore(newEncryptionPassword: string): void {
-    internalEncryptionPassword = newEncryptionPassword;
-  }
+  //set keystore(newEncryptionPassword: string): void {
+  //  internalEncryptionPassword = newEncryptionPassword;
+  //}
 
   get publicKey(): Promise<string | void> {
     /*
@@ -291,7 +294,8 @@ export default class SoftwareWallet {
      */
     return (async () => {
       const privateKey: string = await this.privateKey;
-      const reversedPublicKey: string = privateToPublic(privateKey).toString(
+      const privateKeyBuffer = Buffer.from(privateKey, HEX_HASH_TYPE);
+      const reversedPublicKey: string = privateToPublic(privateKeyBuffer).toString(
         HEX_HASH_TYPE,
       );
       /*

@@ -7,19 +7,18 @@ import { isSecretStorageWallet } from 'ethers/utils/json-wallet';
 import {
   derivationPathSerializer,
   userInputValidator,
-} from '@colony/purser-core/helpers';
+} from '../purser-core/helpers';
 import {
   objectToErrorString,
   getRandomValues,
   warning,
-} from '@colony/purser-core/utils';
+} from '../purser-core/utils';
 
-import { PATH, CHAIN_IDS } from '@colony/purser-core/defaults';
+import { PATH, CHAIN_IDS } from '../purser-core/defaults';
 
 import {
-  WalletObjectType,
   WalletArgumentsType,
-} from '@colony/purser-core/flowtypes';
+} from '../purser-core/types';
 
 import SoftwareWallet from './class';
 
@@ -84,7 +83,7 @@ export const open = async (
      * @TODO Detect if existing but not valid keystore, and warn the user
      */
     if (keystore && isSecretStorageWallet(keystore) && password) {
-      const keystoreWallet: Object =
+      const keystoreWallet: EthersWallet =
         /*
          * Prettier suggests changes that would always result in eslint
          * breaking. This must be one of the edge cases of prettier.
@@ -104,16 +103,18 @@ export const open = async (
        * This needs to be refactored to pass values to the SoftwareWallet
        * class in a less repetitious way
        */
-      keystoreWallet.keystore = keystore;
-      keystoreWallet.password = password;
-      keystoreWallet.chainId = chainId;
-      return new SoftwareWallet(keystoreWallet);
+      const walletArgs : WalletArgumentsType = keystoreWallet ;
+      walletArgs.keystore = keystore;
+      walletArgs.password = password;
+      walletArgs.chainId = chainId;
+
+      return new SoftwareWallet(walletArgs);
     }
     /*
      * @TODO Detect if existing but not valid mnemonic, and warn the user
      */
     if (mnemonic && isValidMnemonic(mnemonic)) {
-      const mnemonicWallet: Object = fromMnemonic(mnemonic).derivePath(
+      const mnemonicWallet = fromMnemonic(mnemonic).derivePath(
         derivationPath,
       );
       extractedPrivateKey = mnemonicWallet.privateKey;
@@ -122,8 +123,14 @@ export const open = async (
      * @TODO Detect if existing but not valid private key, and warn the user
      */
     const privateKeyWallet = new EthersWallet(
-      privateKey || extractedPrivateKey,
+        privateKey || extractedPrivateKey,
     );
+
+    const walletArguments: WalletArgumentsType = {};
+    walletArguments.privateKey = privateKeyWallet.privateKey;
+    walletArguments.address = privateKeyWallet.address;
+
+    walletArguments.privateKey = privateKey || extractedPrivateKey;
     /*
      * Set the mnemonic and password props on the instance object.
      *
@@ -136,14 +143,14 @@ export const open = async (
      * This needs to be refactored to pass values to the SoftwareWallet
      * class in a less repetitious way
      */
-    privateKeyWallet.password = password;
-    privateKeyWallet.chainId = chainId;
+    walletArguments.password = password;
+    walletArguments.chainId = chainId;
     /*
      * @NOTE mnemonic prop was renamed due to naming conflict with getter-only
      * ethers prop
      */
-    privateKeyWallet.originalMnemonic = mnemonic;
-    return new SoftwareWallet(privateKeyWallet);
+    walletArguments.originalMnemonic = mnemonic;
+    return new SoftwareWallet(walletArguments);
   } catch (caughtError) {
     throw new Error(
       `${messages.open} ${objectToErrorString({
@@ -186,7 +193,7 @@ export const create = async (
     entropy = getRandomValues(new Uint8Array(65536)),
     chainId = CHAIN_IDS.HOMESTEAD,
   } = argumentObject;
-  let basicWallet: WalletObjectType;
+  let basicWallet: WalletArgumentsType;
   try {
     if (!entropy || (entropy && !(entropy instanceof Uint8Array))) {
       warning(messages.noEntrophy);

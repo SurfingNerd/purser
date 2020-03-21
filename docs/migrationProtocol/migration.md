@@ -54,5 +54,21 @@ export interface TransactionConfig {
 }
 ´´´
 
+### purser-software
+removed the setter purser-software keystore.
+
+set keystore(newEncryptionPassword: string): void {
+    internalEncryptionPassword = newEncryptionPassword;
+}
+
+#### Private Key is passed forward as Buffer
+see privateKeyBuffer, ethereum-js privateToPublic works only with buffers.
+
+#### Private Key from Mnemonic
+
+SoftwareWallet requires `WalletArgumentsType` as construction argument.
+In the old implementation an
+
+
 ## Should be tested
 - support for msCrypto (Edge browser)

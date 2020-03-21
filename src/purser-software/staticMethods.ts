@@ -20,6 +20,10 @@ import { objectToErrorString } from '../purser-core/utils';
 
 import { staticMethods as messages } from './messages';
 
+import {
+    TransactionObjectTypeWithCallback
+} from "../purser-core/types";
+
 /**
  * Sign a transaction object and return the serialized signature (as a hex string)
  *
@@ -38,10 +42,7 @@ import { staticMethods as messages } from './messages';
  *
  * @return {Promise<string>} the hex signature string
  */
-export const signTransaction = async ({
-  callback,
-  ...transactionObject
-}: Object = {}): Promise<string> => {
+export const signTransaction = async (transactionObject: TransactionObjectTypeWithCallback): Promise<string> => {
   const {
     gasPrice,
     gasLimit,
@@ -52,7 +53,7 @@ export const signTransaction = async ({
     inputData,
   } = transactionObjectValidator(transactionObject);
   try {
-    const signedTransaction: string = await callback(
+    const signedTransaction: string = await transactionObject.callback(
       Object.assign(
         {},
         {
@@ -110,7 +111,7 @@ export const signTransaction = async ({
  * @return {Promise<string>} The signed message `hex` string (wrapped inside a `Promise`)
  */
 export const signMessage = async (
-  { message, messageData, callback }: { message: string, messageData: any, callback: (toSign) } ,
+  { message, messageData, callback }: { message: string, messageData: any, callback: (toSign: any) => string }
 ): Promise<string> => {
   /*
    * Validate input value
@@ -142,10 +143,12 @@ export const signMessage = async (
  *
  * @return {Promise<boolean>} A boolean to indicate if the message/signature pair are valid (wrapped inside a `Promise`)
  */
-export const verifyMessage = async ({
-  address,
-  ...signatureMessage
-}: Object = {}): Promise<boolean> => {
+export const verifyMessage = async (signatureMessage: {
+  address : string,
+  message : string,
+  signature: string
+}): Promise<boolean> => {
+  const {address } = signatureMessage;
   /*
    * Validate the address locally
    */

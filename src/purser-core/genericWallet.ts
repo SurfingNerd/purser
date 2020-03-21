@@ -60,6 +60,7 @@ export default class GenericWallet {
      */
     hexSequenceValidator(publicKey);
     hexSequenceValidator(chainCode);
+    chainCode
     /*
      * Derive the public key with the address index, so we can get the address
      */

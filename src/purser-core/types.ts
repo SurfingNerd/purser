@@ -66,21 +66,23 @@ export interface TransactionObjectType {
   inputData: string,
 };
 
+export interface TransactionObjectTypeWithCallback extends TransactionObjectTypeWithTo {
+  callback: (object) => string;
+};
 
 export interface TransactionObjectTypeWithTo extends TransactionObjectType {
   to: string | undefined
-}
+};
 
 export interface TransactionObjectTypeWithAddresses extends TransactionObjectTypeWithTo {
   from: string | undefined
-}
+};
 
 export interface SignMessageData {
   message: any,
   messageData: any
-}
+};
 
-/*
 export type WalletObjectType = {
     address: string,
     otherAddresses?: Array<string>,
@@ -91,9 +93,8 @@ export type WalletObjectType = {
     readonly derivationPath?: Promise<string>,
     privateKey?: string,
     readonly publicKey?: Promise<string>,
-    sign: (...*) => Promise<TransactionObjectType>,
+    sign: (...any) => Promise<TransactionObjectType>,
 };
-*/
 
 export type WalletArgumentsType = {
   address?: string,
@@ -109,8 +110,14 @@ export type WalletArgumentsType = {
   entropy?: Uint8Array,
   password?: string,
   chainId?: number,
-  sign?: () => {},
-  signMessage?: () => {},
+  /*
+  @param {TransactionRequest} message
+  */
+  sign?: (transaction: any) => Promise<string>,
+  /*
+  @param {Arrayish} message
+  */
+  signMessage?: (message: any) => Promise<string>,
 };
 
 export type MessageObjectType = {
