@@ -111,8 +111,9 @@ export const signTransaction = async (transactionObject: TransactionObjectTypeWi
  * @return {Promise<string>} The signed message `hex` string (wrapped inside a `Promise`)
  */
 export const signMessage = async (
-  { message, messageData, callback }: { message: string, messageData: any, callback: (toSign: any) => string }
-): Promise<string> => {
+  obj : { message: string, messageData: any, callback: (toSign: any) => string }
+) : Promise<string> => {
+    const { message, messageData, callback } = obj;
   /*
    * Validate input value
    */
@@ -149,6 +150,7 @@ export const verifyMessage = async (signatureMessage: {
   signature: string
 }): Promise<boolean> => {
   const {address } = signatureMessage;
+
   /*
    * Validate the address locally
    */

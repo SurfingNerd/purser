@@ -7,7 +7,7 @@
     "strictPropertyInitialization": false,
     "target": "es6",
     "outDir": "./modules/node_modules/@colony",
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
     "exclude": [
         "temp"
