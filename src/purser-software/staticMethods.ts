@@ -21,7 +21,7 @@ import { objectToErrorString } from '../purser-core/utils';
 import { staticMethods as messages } from './messages';
 
 import {
-    TransactionObjectTypeWithCallback
+    TransactionObjectTypeWithCallback, TransactionObjectTypeWithTo
 } from "../purser-core/types";
 
 /**
@@ -42,7 +42,19 @@ import {
  *
  * @return {Promise<string>} the hex signature string
  */
-export const signTransaction = async (transactionObject: TransactionObjectTypeWithCallback): Promise<string> => {
+export const signTransaction = async (obj: TransactionObjectTypeWithCallback): Promise<string> => {
+
+  const transactionObject : TransactionObjectTypeWithTo =
+  {
+        chainId: obj.chainId,
+        gasPrice: obj.gasPrice,
+        gasLimit: obj.gasLimit,
+        nonce: obj.nonce,
+        value: obj.value,
+        inputData: obj.inputData,
+        to: obj.to
+  };
+
   const {
     gasPrice,
     gasLimit,
@@ -53,7 +65,7 @@ export const signTransaction = async (transactionObject: TransactionObjectTypeWi
     inputData,
   } = transactionObjectValidator(transactionObject);
   try {
-    const signedTransaction: string = await transactionObject.callback(
+    const signedTransaction: string = await obj.callback(
       Object.assign(
         {},
         {
