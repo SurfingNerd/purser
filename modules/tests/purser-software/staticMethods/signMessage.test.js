@@ -70,7 +70,7 @@ describe('`Software` Wallet Module', () => {
       );
     });
     test('Throws if something goes wrong', async () => {
-      expect(signMessage()).rejects.toThrow();
+      expect(() => signMessage()).toThrow();
     });
   });
 });

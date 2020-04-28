@@ -123,9 +123,9 @@ export const signTransaction = async (obj: TransactionObjectTypeWithCallback): P
  * @return {Promise<string>} The signed message `hex` string (wrapped inside a `Promise`)
  */
 export const signMessage = async (
-  obj : { message: string, messageData: any, callback: (toSign: any) => string }
+    { message, messageData, callback }
+    : { message: string, messageData: any, callback: (toSign: any) => string }
 ) : Promise<string> => {
-    const { message, messageData, callback } = obj;
   /*
    * Validate input value
    */

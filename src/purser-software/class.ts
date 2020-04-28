@@ -295,9 +295,10 @@ export default class SoftwareWallet {
     return (async () => {
       const privateKey: string = await this.privateKey;
       const privateKeyBuffer = Buffer.from(privateKey, HEX_HASH_TYPE);
-      const reversedPublicKey: string = privateToPublic(privateKeyBuffer).toString(
+      const publicKeyBuffer = privateToPublic(privateKeyBuffer);
+      let reversedPublicKey: string = publicKeyBuffer.toString(
         HEX_HASH_TYPE,
-      ).toString(); //toString() needs to get called an additional time, because toString() might return a Buffer.
+      );
       /*
        * Validate the reversed public key
        */
@@ -308,6 +309,7 @@ export default class SoftwareWallet {
       const normalizedPublicKey: string = hexSequenceNormalizer(
         reversedPublicKey,
       );
+      console.log('const normalizedPublicKey: string = hexSequenceNormalizer(');
       /*
        * Memoizing the getter
        *
