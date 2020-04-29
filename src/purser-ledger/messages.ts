@@ -1,7 +1,7 @@
 /* @flow */
 /* eslint-disable max-len */
 
-export const staticMethods: Object = {
+export const staticMethods = {
   userExportGenericError:
     'Could not export the wallet account, check the values you are sending to your Ledger Wallet',
   userSignTxGenericError:
@@ -15,7 +15,7 @@ export const staticMethods: Object = {
     'We need your confirmation before we can sign the message. Check your Ledger Wallet!',
 };
 
-export const transportErrors: Object = {
+export const transportErrors = {
   notSupported:
     'Your browser does not support the U2F transport protocol (required by your Ledger device)',
   notSecure:
