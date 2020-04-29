@@ -1,4 +1,4 @@
-/* @flow */
+
 
 /*
  * See: http://ledgerhq.github.io/ledgerjs/docs/#ethgetaddress

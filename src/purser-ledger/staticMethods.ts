@@ -5,27 +5,27 @@ import { Transaction as EthereumTx } from 'ethereumjs-tx';
 import {
   derivationPathValidator,
   hexSequenceValidator,
-} from '@colony/purser-core/validators';
+} from '../purser-core/validators';
 import {
   derivationPathNormalizer,
   multipleOfTwoHexValueNormalizer,
   hexSequenceNormalizer,
   addressNormalizer,
-} from '@colony/purser-core/normalizers';
-import { warning, objectToErrorString } from '@colony/purser-core/utils';
+} from '../purser-core/normalizers';
+import { warning, objectToErrorString } from '../purser-core/utils';
 import {
   verifyMessageSignature,
   transactionObjectValidator,
   messageVerificationObjectValidator,
   messageOrDataValidator,
   getChainDefinition,
-} from '@colony/purser-core/helpers';
-import { HEX_HASH_TYPE, SIGNATURE } from '@colony/purser-core/defaults';
+} from '../purser-core/helpers';
+import { HEX_HASH_TYPE, SIGNATURE } from '../purser-core/defaults';
 import { ledgerConnection, handleLedgerConnectionError } from './helpers';
 
 import { staticMethods as messages } from './messages';
 
-import { LedgerInstanceType } from './flowtypes';
+import { LedgerInstanceType } from './types';
 
 /**
  * Sign a transaction object and return the serialized signature (as a hex string)

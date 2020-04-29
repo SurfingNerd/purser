@@ -3,12 +3,12 @@
 import U2fTransport from '@ledgerhq/hw-transport-u2f';
 import LedgerEthApp from '@ledgerhq/hw-app-eth';
 
-import { HTTPS_PROTOCOL } from '@colony/purser-core/defaults';
+import { HTTPS_PROTOCOL } from '../purser-core/defaults';
 
 import { transportErrors as messages } from './messages';
 import { U2F_TRANSPORT_ERROR } from './defaults';
 
-import { LedgerInstanceType, U2FTransportError } from './flowtypes';
+import { LedgerInstanceType, U2FTransportError } from './types';
 
 /**
  * Create a new Ledger U2F transport and connection to the Ethereum App

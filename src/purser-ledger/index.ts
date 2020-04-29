@@ -3,16 +3,16 @@
 import {
   derivationPathSerializer,
   userInputValidator,
-} from '@colony/purser-core/helpers';
-import { PATH, CHAIN_IDS } from '@colony/purser-core/defaults';
+} from '../purser-core/helpers';
+import { PATH, CHAIN_IDS } from '../purser-core/defaults';
 
-import { WalletArgumentsType } from '@colony/purser-core/flowtypes';
+import { WalletArgumentsType } from '../purser-core/types';
 
 import LedgerWallet from './class';
 import { ledgerConnection, handleLedgerConnectionError } from './helpers';
 import { staticMethods as messages } from './messages';
 
-import { LedgerInstanceType } from './flowtypes';
+import { LedgerInstanceType } from './types';
 
 /**
  * Open a new wallet from the public key and chain code, which are received

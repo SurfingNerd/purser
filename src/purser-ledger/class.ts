@@ -1,13 +1,11 @@
-/* @flow */
-
-import GenericWallet from '@colony/purser-core/genericWallet';
-import { userInputValidator } from '@colony/purser-core/helpers';
-import { DESCRIPTORS, REQUIRED_PROPS } from '@colony/purser-core/defaults';
-import { TYPE_HARDWARE, SUBTYPE_LEDGER } from '@colony/purser-core/types';
+import GenericWallet from '../purser-core/genericWallet';
+import { userInputValidator } from '../purser-core/helpers';
+import { DESCRIPTORS, REQUIRED_PROPS } from '../purser-core/defaults';
+import { TYPE_HARDWARE, SUBTYPE_LEDGER } from '../purser-core/types';
 import {
   GenericClassArgumentsType,
   TransactionObjectType,
-} from '@colony/purser-core/flowtypes';
+} from '../purser-core/types';
 
 import { signTransaction, signMessage, verifyMessage } from './staticMethods';
 
