@@ -309,7 +309,6 @@ export default class SoftwareWallet {
       const normalizedPublicKey: string = hexSequenceNormalizer(
         reversedPublicKey,
       );
-      console.log('const normalizedPublicKey: string = hexSequenceNormalizer(');
       /*
        * Memoizing the getter
        *
