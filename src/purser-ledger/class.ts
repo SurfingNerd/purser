@@ -1,7 +1,7 @@
 import GenericWallet from '../purser-core/genericWallet';
 import { userInputValidator } from '../purser-core/helpers';
 import { DESCRIPTORS, REQUIRED_PROPS } from '../purser-core/defaults';
-import { TYPE_HARDWARE, SUBTYPE_LEDGER } from '../purser-core/types';
+import {TYPE_HARDWARE, SUBTYPE_LEDGER, SignMessageData, MessageVerificationObjectType} from '../purser-core/types';
 import {
   GenericClassArgumentsType,
   TransactionObjectType,
@@ -44,7 +44,7 @@ export default class LedgerWallet extends GenericWallet {
       signMessage: Object.assign(
         {},
         {
-          value: async (messageObject: Object = {}) => {
+          value: async (messageObject: SignMessageData) => {
             /*
              * Validate the trasaction's object input
              */
@@ -64,7 +64,7 @@ export default class LedgerWallet extends GenericWallet {
       verifyMessage: Object.assign(
         {},
         {
-          value: async (signatureVerificationObject: Object = {}) => {
+          value: async (signatureVerificationObject: MessageVerificationObjectType) => {
             /*
              * Validate the trasaction's object input
              */
