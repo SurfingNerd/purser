@@ -162,7 +162,7 @@ describe('Ledger` Hardware Wallet Module', () => {
          * Should have the `signMessage()` internal method set on the instance
          */
         expect(ledgerWallet).toHaveProperty('signMessage');
-        await ledgerWallet.signMessage();
+        await ledgerWallet.signMessage({ derivationPath: defaultDerivationPath });
         /*
          * `signMessage()` internal method, which is mapped to the
          * static `signMessage()` method
@@ -194,7 +194,7 @@ describe('Ledger` Hardware Wallet Module', () => {
          * Should have the `verifyMessage()` internal method set on the instance
          */
         expect(ledgerWallet).toHaveProperty('verifyMessage');
-        await ledgerWallet.verifyMessage();
+        await ledgerWallet.verifyMessage({ publicKey: defaultPublicKey });
         /*
          * `signMessage()` internal method, which is mapped to the
          * static `signMessage()` method

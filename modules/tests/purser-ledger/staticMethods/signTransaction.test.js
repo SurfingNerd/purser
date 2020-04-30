@@ -213,7 +213,14 @@ describe('`Ledger` Hardware Wallet Module Static Methods', () => {
        * an error along the way
        */
       ledgerConnection.mockRejectedValueOnce(new Error());
-      await signTransaction();
+      await signTransaction({
+        gasPrice,
+        gasLimit,
+        chainId,
+        nonce,
+        value,
+        inputData,
+      });
       /*
        * Handles the specific transport error
        */
