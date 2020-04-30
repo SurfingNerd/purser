@@ -67,7 +67,7 @@ export type LedgerInstanceType = {
  * The Error thrown by the U2F transport is not a standard Error instance
  */
 export type U2FTransportError = {
-  ...Error,
+  //...Error,
   id: string,
   originalError: Object,
 };

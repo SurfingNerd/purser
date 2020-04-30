@@ -13,6 +13,8 @@ export const staticMethods = {
     'We need your confirmation before we can sign the transaction. Check your Ledger Wallet!',
   userSignMessageInteractionWarning:
     'We need your confirmation before we can sign the message. Check your Ledger Wallet!',
+  signMessageArgumentMissing:
+      'signMessage({}) function requires on object typed argument.',
 };
 
 export const transportErrors = {

@@ -4,7 +4,7 @@ import { DESCRIPTORS, REQUIRED_PROPS } from '../purser-core/defaults';
 import {TYPE_HARDWARE, SUBTYPE_LEDGER, SignMessageData, MessageVerificationObjectType} from '../purser-core/types';
 import {
   GenericClassArgumentsType,
-  TransactionObjectType,
+  TransactionObjectTypeWithTo,
 } from '../purser-core/types';
 
 import { signTransaction, signMessage, verifyMessage } from './staticMethods';
@@ -23,7 +23,7 @@ export default class LedgerWallet extends GenericWallet {
       sign: Object.assign(
         {},
         {
-          value: async (transactionObject: TransactionObjectType) => {
+          value: async (transactionObject: TransactionObjectTypeWithTo) => {
             /*
              * Validate the trasaction's object input
              */

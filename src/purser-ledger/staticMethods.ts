@@ -1,5 +1,3 @@
-/* @flow */
-
 import { Transaction as EthereumTx } from 'ethereumjs-tx';
 
 import {
@@ -26,6 +24,7 @@ import { ledgerConnection, handleLedgerConnectionError } from './helpers';
 import { staticMethods as messages } from './messages';
 
 import { LedgerInstanceType } from './types';
+import { TransactionObjectTypeWithDerivationPath, TransactionObjectTypeWithTo } from "../purser-core/types";
 
 /**
  * Sign a transaction object and return the serialized signature (as a hex string)
@@ -45,10 +44,19 @@ import { LedgerInstanceType } from './types';
  *
  * @return {Promise<string>} the hex signature string
  */
-export const signTransaction = async ({
-  derivationPath,
-  ...transactionObject
-}: Object = {}): Promise<string | void> => {
+export const signTransaction = async ( obj : TransactionObjectTypeWithDerivationPath): Promise<string | void> => {
+
+  const transactionObject : TransactionObjectTypeWithTo =
+      {
+        chainId: obj.chainId,
+        gasPrice: obj.gasPrice,
+        gasLimit: obj.gasLimit,
+        nonce: obj.nonce,
+        value: obj.value,
+        inputData: obj.inputData,
+        to: obj.to
+      };
+
   const {
     gasPrice,
     gasLimit,
@@ -60,6 +68,7 @@ export const signTransaction = async ({
   } = transactionObjectValidator(transactionObject);
   try {
     const ledger: LedgerInstanceType = await ledgerConnection();
+    const derivationPath = obj.derivationPath;
     derivationPathValidator(derivationPath);
     /*
      * Ledger needs the unsigned "raw" transaction hex, which it will sign and
@@ -78,52 +87,21 @@ export const signTransaction = async ({
       Object.assign(
         {},
         {
-          /*
-           * We could really do with some BN.js flow types declarations :(
-           */
           gasPrice: hexSequenceNormalizer(
-            /*
-             * @TODO Add `bigNumber` `toHexString` wrapper method
-             *
-             * Flow confuses bigNumber's `toString` with the String object
-             * prototype `toString` method
-             */
-            /* $FlowFixMe */
-            multipleOfTwoHexValueNormalizer(gasPrice.toString(16)),
+            multipleOfTwoHexValueNormalizer(gasPrice),
           ),
           gasLimit: hexSequenceNormalizer(
-            /*
-             * @TODO Add `bigNumber` `toHexString` wrapper method
-             *
-             * Flow confuses bigNumber's `toString` with the String object
-             * prototype `toString` method
-             */
-            /* $FlowFixMe */
-            multipleOfTwoHexValueNormalizer(gasLimit.toString(16)),
+            multipleOfTwoHexValueNormalizer(gasLimit),
           ),
           /*
            * Nonces needs to be sent in as a hex string, and to be padded as a multiple of two.
            * Eg: '3' to be '03', `12c` to be `012c`
            */
           nonce: hexSequenceNormalizer(
-            /*
-             * @TODO Add `bigNumber` `toHexString` wrapper method
-             *
-             * Flow confuses bigNumber's `toString` with the String object
-             * prototype `toString` method
-             */
-            /* $FlowFixMe */
             multipleOfTwoHexValueNormalizer(nonce.toString(16)),
           ),
           value: hexSequenceNormalizer(
-            /*
-             * @TODO Add `bigNumber` `toHexString` wrapper method
-             *
-             * Flow confuses bigNumber's `toString` with the String object
-             * prototype `toString` method
-             */
-            /* $FlowFixMe */
-            multipleOfTwoHexValueNormalizer(value.toString(16)),
+            multipleOfTwoHexValueNormalizer(value),
           ),
           data: hexSequenceNormalizer(inputData),
           /*
@@ -174,9 +152,9 @@ export const signTransaction = async ({
      * @NOTE We need to modify the original transaction
      * Otherwise EthereumTx will complain because internally it checks for the valid instance
      */
-    unsignedTransaction.r = hexSequenceNormalizer(rSignatureComponent);
-    unsignedTransaction.s = hexSequenceNormalizer(sSignatureComponent);
-    unsignedTransaction.v = hexSequenceNormalizer(recoveryParameter);
+    unsignedTransaction.r = Buffer.from(hexSequenceNormalizer(rSignatureComponent), HEX_HASH_TYPE);
+    unsignedTransaction.s = Buffer.from(hexSequenceNormalizer(sSignatureComponent), HEX_HASH_TYPE);
+    unsignedTransaction.v =  Buffer.from(hexSequenceNormalizer(recoveryParameter), HEX_HASH_TYPE);
     const serializedSignedTransaction = unsignedTransaction
       .serialize()
       .toString(HEX_HASH_TYPE);
@@ -206,11 +184,17 @@ export const signTransaction = async ({
  *
  * @return {Promise<string>} The signed message `hex` string (wrapped inside a `Promise`)
  */
-export const signMessage = async ({
-  derivationPath,
-  message,
-  messageData,
-}: Object = {}): Promise<string | void> => {
+export const signMessage = async (obj: {
+  derivationPath: string,
+  message: string,
+  messageData: any,
+}): Promise<string | void> => {
+
+  if (obj === null || typeof obj !== 'object'){
+    throw new Error(messages.signMessageArgumentMissing);
+  }
+
+  const { derivationPath, message, messageData } = obj;
   /*
    * Validate input values: derivationPath and message
    */
@@ -266,7 +250,7 @@ export const signMessage = async ({
  *
  * @method verifyMessage
  *
- * @param {string} publicKey The public key to verify the signature agains (this is coming from the wallet instance)
+ * @param {string} publicKey The public key to verify the signature against (this is coming from the wallet instance)
  * @param {string} message The message to verify if it was signed correctly
  * @param {string} signature The message signature as a `hex` string (you usually get this via `signMessage`)
  *
@@ -274,14 +258,19 @@ export const signMessage = async ({
  *
  * @return {Promise<boolean>} A boolean to indicate if the message/signature pair are valid (wrapped inside a `Promise`)
  */
-export const verifyMessage = async ({
-  publicKey,
-  ...signatureMessage
-}: Object): Promise<boolean> => {
+export const verifyMessage = async (obj: {
+  publicKey : string,
+  message: string,
+  signature: string
+}): Promise<boolean> => {
+  const {publicKey} = obj;
   /*
    * Validate the public key locally
    */
   hexSequenceValidator(publicKey);
+
+  const signatureMessage = { message: obj.message, signature: obj.signature };
+
   /*
    * Validate the rest of the pros using the core helper
    */

@@ -78,6 +78,11 @@ export interface TransactionObjectTypeWithAddresses extends TransactionObjectTyp
   from: string | undefined
 };
 
+export interface TransactionObjectTypeWithDerivationPath extends TransactionObjectTypeWithTo {
+  chainId: number,
+  derivationPath: string
+}
+
 export interface SignMessageData {
   message: any,
   messageData: any
