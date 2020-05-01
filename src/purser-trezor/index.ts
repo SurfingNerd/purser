@@ -5,11 +5,11 @@ import { fromString } from 'bip32-path';
 import {
   derivationPathSerializer,
   userInputValidator,
-} from '@colony/purser-core/helpers';
-import { warning, objectToErrorString } from '@colony/purser-core/utils';
+} from '../purser-core/helpers';
+import { warning, objectToErrorString } from '../purser-core/utils';
 
-import { PATH, CHAIN_IDS } from '@colony/purser-core/defaults';
-import type { WalletArgumentsType } from '@colony/purser-core/flowtypes';
+import { PATH, CHAIN_IDS } from '../purser-core/defaults';
+import type { WalletArgumentsType } from '../purser-core/flowtypes';
 
 import TrezorWallet from './class';
 import { payloadListener } from './helpers';

@@ -1,12 +1,11 @@
-/* @flow */
 /* eslint-disable max-len */
 
-export const classInstance: Object = {
+export const classInstance = {
   signContractDeployment:
     'In order to sign a contract deployment transaction (Not having a destination address), the Trezor service requires the `inputData` prop value to be set',
 };
 
-export const staticMethods: Object = {
+export const staticMethods = {
   userExportCancel:
     'User cancelled the account export request (via Window prompt)',
   userExportGenericError:

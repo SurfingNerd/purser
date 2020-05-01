@@ -1,4 +1,3 @@
-/* @flow */
 
 export type PayloadType = {
   type: string,
@@ -21,8 +20,13 @@ export type ServiceUrlType = {
   keyValue?: any,
 };
 
+export type PromptGeneratorParams = {
+  serviceUrl: string,
+  windowFeatures:  string
+}
+
 export type PayloadListenerType = {
-  payload: PayloadType,
+  payload: string,
   origin?: string,
 };
 

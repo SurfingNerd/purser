@@ -1,15 +1,19 @@
-/* @flow */
-
-import GenericWallet from '@colony/purser-core/genericWallet';
-import { userInputValidator } from '@colony/purser-core/helpers';
-import { warning } from '@colony/purser-core/utils';
-import { DESCRIPTORS, REQUIRED_PROPS } from '@colony/purser-core/defaults';
-import { TYPE_HARDWARE, SUBTYPE_TREZOR } from '@colony/purser-core/types';
+import GenericWallet from '../purser-core/genericWallet';
+import { userInputValidator } from '../purser-core/helpers';
+import { warning } from '../purser-core/utils';
+import { DESCRIPTORS, REQUIRED_PROPS } from '../purser-core/defaults';
+import {
+  TYPE_HARDWARE,
+  SUBTYPE_TREZOR,
+  TransactionObjectTypeWithTo,
+  SignMessageData,
+  MessageVerificationObjectType
+} from '../purser-core/types';
 
 import type {
   TransactionObjectType,
   GenericClassArgumentsType,
-} from '@colony/purser-core/flowtypes';
+} from '../purser-core/types';
 
 import { signTransaction, signMessage, verifyMessage } from './staticMethods';
 
@@ -30,7 +34,7 @@ export default class TrezorWallet extends GenericWallet {
       sign: Object.assign(
         {},
         {
-          value: async (transactionObject: TransactionObjectType) => {
+          value: async (transactionObject: TransactionObjectTypeWithTo) => {
             let requiredSignProps: Array<String> =
               REQUIRED_TREZOR_PROPS.SIGN_TRANSACTION;
             const { chainId = this.chainId, to } = transactionObject || {};
@@ -71,7 +75,7 @@ export default class TrezorWallet extends GenericWallet {
       signMessage: Object.assign(
         {},
         {
-          value: async (messageObject: Object = {}) => {
+          value: async (messageObject: SignMessageData) => {
             /*
              * Validate the trasaction's object input
              */
@@ -91,7 +95,7 @@ export default class TrezorWallet extends GenericWallet {
       verifyMessage: Object.assign(
         {},
         {
-          value: async (signatureVerificationObject: Object = {}) => {
+          value: async (signatureVerificationObject: MessageVerificationObjectType) => {
             /*
              * Validate the trasaction's object input
              */

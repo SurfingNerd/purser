@@ -1,4 +1,3 @@
-/* @flow */
 
 import { fromString } from 'bip32-path';
 import { Transaction as EthereumTx } from 'ethereumjs-tx';
@@ -6,26 +5,26 @@ import { Transaction as EthereumTx } from 'ethereumjs-tx';
 import {
   addressValidator,
   derivationPathValidator,
-} from '@colony/purser-core/validators';
+} from '../purser-core/validators';
 import {
   derivationPathNormalizer,
   multipleOfTwoHexValueNormalizer,
   addressNormalizer,
   hexSequenceNormalizer,
-} from '@colony/purser-core/normalizers';
+} from '../purser-core/normalizers';
 import {
   warning,
   bigNumber,
   objectToErrorString,
-} from '@colony/purser-core/utils';
+} from '../purser-core/utils';
 import {
   transactionObjectValidator,
   messageVerificationObjectValidator,
   messageOrDataValidator,
   getChainDefinition,
-} from '@colony/purser-core/helpers';
+} from '../purser-core/helpers';
 
-import { HEX_HASH_TYPE, SIGNATURE } from '@colony/purser-core/defaults';
+import { HEX_HASH_TYPE, SIGNATURE } from '../purser-core/defaults';
 
 import { payloadListener } from './helpers';
 

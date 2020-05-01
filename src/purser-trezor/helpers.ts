@@ -1,7 +1,5 @@
-/* @flow */
-
-import { messageValidator } from '@colony/purser-core/validators';
-import { MATCH } from '@colony/purser-core/defaults';
+import { messageValidator } from '../purser-core/validators';
+import { MATCH } from '../purser-core/defaults';
 
 import {
   SERVICE_DOMAIN,
@@ -18,6 +16,7 @@ import type {
   ServiceUrlType,
   PayloadListenerType,
   PayloadResponseType,
+  PromptGeneratorParams,
 } from './flowtypes';
 
 /**
@@ -117,10 +116,10 @@ export const serviceUrlGenerator = ({
  *
  * @return {Object} The new instance of the Window object (opened)
  */
-export const promptGenerator = ({
-  serviceUrl = serviceUrlGenerator({ keyValue: new Date().getTime() }),
-  windowFeatures = windowFeaturesSerializer(WINDOW_FEATURES),
-}: Object = {}): Object => window.open(serviceUrl, WINDOW_NAME, windowFeatures);
+export const promptGenerator = ( obj : PromptGeneratorParams = {
+  serviceUrl: serviceUrlGenerator({ keyValue: new Date().getTime() }),
+  windowFeatures: windowFeaturesSerializer(WINDOW_FEATURES),
+}) => window.open(obj.serviceUrl, WINDOW_NAME, obj.windowFeatures);
 
 /**
  * This method acomplishes four things: spawn an 'message' event listener,
@@ -149,16 +148,17 @@ export const promptGenerator = ({
  *
  * @return {Promise<Object>} The new instance of the Window object (opened)
  */
-export const payloadListener = async ({
-  payload,
-  origin: payloadOrigin = SERVICE_DOMAIN,
-}: PayloadListenerType = {}): Promise<PayloadResponseType> =>
+export const payloadListener = async (obj : PayloadListenerType): Promise<PayloadResponseType> =>
   new Promise((resolve, reject) => {
+    let { payload, origin } = obj;
+    if (origin === undefined) {
+      origin = SERVICE_DOMAIN;
+    }
     const prompt = promptGenerator();
     const messageListener = event => {
       const { data, isTrusted, origin } = event;
       const sameOrigin =
-        prompt && sanitizeUrl(payloadOrigin) === sanitizeUrl(origin);
+        prompt && sanitizeUrl(payload) === sanitizeUrl(origin);
       const responseIsObject = data && typeof data === 'object';
       /*
        * Intial call will fail as the origin is the local domain
@@ -168,7 +168,7 @@ export const payloadListener = async ({
        */
       if (isTrusted && sameOrigin) {
         if (data === RESPONSE_HANDSHAKE) {
-          return prompt.postMessage(payload, payloadOrigin);
+          return prompt.postMessage(payload, payload);
         }
         if (responseIsObject && data.success) {
           prompt.close();

@@ -1,7 +1,3 @@
-/* @flow */
-
-import type { WindowFeaturesType } from './flowtypes';
-
 /*
  * Trezor service Url
  */
@@ -20,7 +16,7 @@ export const WINDOW_NAME: string = 'trezor-service-connection';
  */
 export const PROMPT_WIDTH: number = 600;
 export const PROMPT_HEIGHT: number = 500;
-export const WINDOW_FEATURES: WindowFeaturesType = {
+export const WINDOW_FEATURES = {
   width: PROMPT_WIDTH,
   height: PROMPT_HEIGHT,
   /*
@@ -46,7 +42,7 @@ export const FIRMWARE_MIN: string = '1.4.0';
 /*
  * This list is not by any strech complete. It's just the ones we use.
  */
-export const STD_ERRORS: Object = {
+export const STD_ERRORS = {
   CANCEL_ACC_EXPORT: 'Cancelled',
   CANCEL_TX_SIGN: 'Action cancelled by user',
   INVALID_SIGN: 'Invalid signature',
@@ -55,7 +51,7 @@ export const STD_ERRORS: Object = {
 /*
  * Prop names used to validate user input against
  */
-export const REQUIRED_PROPS: Object = {
+export const REQUIRED_PROPS = {
   SIGN_TRANSACTION: ['to'],
   SIGN_TRANSACTION_CONTRACT: ['inputData'],
 };
