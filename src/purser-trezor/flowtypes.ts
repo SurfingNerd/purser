@@ -26,7 +26,7 @@ export type PromptGeneratorParams = {
 }
 
 export type PayloadListenerType = {
-  payload: string,
+  payload: PayloadType,
   origin?: string,
 };
 

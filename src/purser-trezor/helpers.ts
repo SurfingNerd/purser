@@ -148,9 +148,13 @@ export const promptGenerator = ( obj : PromptGeneratorParams = {
  *
  * @return {Promise<Object>} The new instance of the Window object (opened)
  */
-export const payloadListener = async (obj : PayloadListenerType): Promise<PayloadResponseType> =>
-  new Promise((resolve, reject) => {
-    let { payload, origin } = obj;
+export const payloadListener = async (obj : {payload: any, payloadOrigin?: string}): Promise<PayloadResponseType> =>
+
+
+    new Promise((resolve, reject) => {
+
+    let { payload, payloadOrigin } = obj;
+    let origin = payloadOrigin;
     if (origin === undefined) {
       origin = SERVICE_DOMAIN;
     }

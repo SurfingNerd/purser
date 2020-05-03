@@ -17,4 +17,6 @@ export const staticMethods = {
   messageSignatureInvalid: 'The message signature is invalid',
   messageSignatureOnlyTrezor:
     'Please take note: The message signature produced by a trezor wallet can only be verified using that trezor wallet (verifyMessage method)',
+  signMessageArgumentMissing:
+      'signMessage({}) function requires on object typed argument.',
 };

@@ -23,6 +23,7 @@ import {
   messageOrDataValidator,
   getChainDefinition,
 } from '../purser-core/helpers';
+import { TransactionObjectTypeWithDerivationPath, TransactionObjectTypeWithTo } from "../purser-core/types";
 
 import { HEX_HASH_TYPE, SIGNATURE } from '../purser-core/defaults';
 
@@ -50,10 +51,19 @@ import { PAYLOAD_SIGNTX, PAYLOAD_SIGNMSG, PAYLOAD_VERIFYMSG } from './payloads';
  *
  * @return {Promise<string>} the hex signature string
  */
-export const signTransaction = async ({
-  derivationPath,
-  ...transactionObject
-}: Object = {}): Promise<string | void> => {
+export const signTransaction = async (obj: TransactionObjectTypeWithDerivationPath): Promise<string | void> => {
+  const transactionObject : TransactionObjectTypeWithTo =
+      {
+        chainId: obj.chainId,
+        gasPrice: obj.gasPrice,
+        gasLimit: obj.gasLimit,
+        nonce: obj.nonce,
+        value: obj.value,
+        inputData: obj.inputData,
+        to: obj.to
+      };
+
+
   const {
     gasPrice,
     gasLimit,
@@ -63,6 +73,7 @@ export const signTransaction = async ({
     value,
     inputData,
   } = transactionObjectValidator(transactionObject);
+  const derivationPath = obj.derivationPath;
   derivationPathValidator(derivationPath);
   /*
    * @TODO Reduce code repetition
@@ -76,48 +87,20 @@ export const signTransaction = async ({
        * We could really do with some BN.js flow types declarations :(
        */
       gasPrice: hexSequenceNormalizer(
-        /*
-         * @TODO Add `bigNumber` `toHexString` wrapper method
-         *
-         * Flow confuses bigNumber's `toString` with the String object
-         * prototype `toString` method
-         */
-        /* $FlowFixMe */
-        multipleOfTwoHexValueNormalizer(gasPrice.toString(16)),
+        multipleOfTwoHexValueNormalizer(gasPrice),
       ),
       gasLimit: hexSequenceNormalizer(
-        /*
-         * @TODO Add `bigNumber` `toHexString` wrapper method
-         *
-         * Flow confuses bigNumber's `toString` with the String object
-         * prototype `toString` method
-         */
-        /* $FlowFixMe */
-        multipleOfTwoHexValueNormalizer(gasLimit.toString(16)),
+        multipleOfTwoHexValueNormalizer(gasPrice),
       ),
       /*
        * Nonces needs to be sent in as a hex string, and to be padded as a multiple of two.
        * Eg: '3' to be '03', `12c` to be `012c`
        */
       nonce: hexSequenceNormalizer(
-        /*
-         * @TODO Add `bigNumber` `toHexString` wrapper method
-         *
-         * Flow confuses bigNumber's `toString` with the String object
-         * prototype `toString` method
-         */
-        /* $FlowFixMe */
         multipleOfTwoHexValueNormalizer(nonce.toString(16)),
       ),
       value: hexSequenceNormalizer(
-        /*
-         * @TODO Add `bigNumber` `toHexString` wrapper method
-         *
-         * Flow confuses bigNumber's `toString` with the String object
-         * prototype `toString` method
-         */
-        /* $FlowFixMe */
-        multipleOfTwoHexValueNormalizer(value.toString(16)),
+        multipleOfTwoHexValueNormalizer(value),
       ),
       data: hexSequenceNormalizer(inputData),
       /*
@@ -149,7 +132,7 @@ export const signTransaction = async ({
   /*
    * Modify the default payload to set the transaction details
    */
-  const modifiedPayloadObject: Object = Object.assign(
+  const modifiedPayloadObject = Object.assign(
     {},
     PAYLOAD_SIGNTX,
     {
@@ -160,42 +143,11 @@ export const signTransaction = async ({
         derivationPathNormalizer(derivationPath),
         true,
       ).toPathArray(),
-      /*
-       * @TODO Add `bigNumber` `toHexString` wrapper method
-       *
-       * Flow confuses bigNumber's `toString` with the String object
-       * prototype `toString` method
-       */
-      /* $FlowFixMe */
-      gas_price: multipleOfTwoHexValueNormalizer(gasPrice.toString(16)),
-      /*
-       * @TODO Add `bigNumber` `toHexString` wrapper method
-       *
-       * Flow confuses bigNumber's `toString` with the String object
-       * prototype `toString` method
-       */
-      /* $FlowFixMe */
-      gas_limit: multipleOfTwoHexValueNormalizer(gasLimit.toString(16)),
+      gas_price: multipleOfTwoHexValueNormalizer(gasPrice),
+      gas_limit: multipleOfTwoHexValueNormalizer(gasLimit),
       chain_id: chainId,
-      /*
-       * Nonces needs to be sent in as a hex string, and to be padded as a multiple of two.
-       * Eg: '3' to be '03', `12c` to be `012c`
-       *
-       * @TODO Add `bigNumber` `toHexString` wrapper method
-       *
-       * Flow confuses bigNumber's `toString` with the String object
-       * prototype `toString` method
-       */
-      /* $FlowFixMe */
       nonce: multipleOfTwoHexValueNormalizer(nonce.toString(16)),
-      /*
-       * @TODO Add `bigNumber` `toHexString` wrapper method
-       *
-       * Flow confuses bigNumber's `toString` with the String object
-       * prototype `toString` method
-       */
-      /* $FlowFixMe */
-      value: multipleOfTwoHexValueNormalizer(value.toString(16)),
+      value: multipleOfTwoHexValueNormalizer(value),
       /*
        * Trezor service requires the prefix from the input data to be stripped
        */
@@ -233,15 +185,15 @@ export const signTransaction = async ({
       r: rSignatureComponent,
       s: sSignatureComponent,
       v: recoveryParameter,
-    }: Object = await payloadListener({ payload: modifiedPayloadObject });
+    } = await payloadListener({ payload: modifiedPayloadObject });
     /*
      * Add the signature values to the unsigned trasaction
      */
-    unsignedTransaction.r = hexSequenceNormalizer(rSignatureComponent);
-    unsignedTransaction.s = hexSequenceNormalizer(sSignatureComponent);
-    unsignedTransaction.v = hexSequenceNormalizer(
+    unsignedTransaction.r = Buffer.from(hexSequenceNormalizer(rSignatureComponent), HEX_HASH_TYPE);
+    unsignedTransaction.s = Buffer.from(hexSequenceNormalizer(sSignatureComponent), HEX_HASH_TYPE);
+    unsignedTransaction.v = Buffer.from(hexSequenceNormalizer(
       bigNumber(recoveryParameter).toString(16),
-    );
+    ), HEX_HASH_TYPE);
     return hexSequenceNormalizer(
       unsignedTransaction.serialize().toString(HEX_HASH_TYPE),
     );
@@ -278,11 +230,15 @@ export const signTransaction = async ({
  *
  * @return {Promise<string>} The signed message `hex` string (wrapped inside a `Promise`)
  */
-export const signMessage = async ({
+export const signMessage = async (obj: {
   derivationPath,
   message,
   messageData,
-}: Object = {}): Promise<string | void> => {
+}): Promise<string | void> => {
+  if (obj === null || typeof obj !== 'object'){
+    throw new Error(messages.signMessageArgumentMissing);
+  }
+  const { derivationPath, message, messageData } = obj;
   /*
    * Validate input values: derivationPath and message
    */
@@ -343,14 +299,18 @@ export const signMessage = async ({
  *
  * @return {Promise<boolean>} A boolean to indicate if the message/signature pair are valid (wrapped inside a `Promise`)
  */
-export const verifyMessage = async ({
-  address,
-  ...signatureMessage
-}: Object = {}): Promise<boolean> => {
+export const verifyMessage = async (obj : {
+  address : string,
+  message : string,
+  signature: string
+}): Promise<boolean> => {
+  const {address} = obj;
   /*
    * Validate the address locally
    */
   addressValidator(address);
+
+  const signatureMessage = { message: obj.message, signature: obj.signature };
   /*
    * Validate the rest of the pros using the core helper
    */

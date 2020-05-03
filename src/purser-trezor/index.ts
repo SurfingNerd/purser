@@ -9,7 +9,7 @@ import {
 import { warning, objectToErrorString } from '../purser-core/utils';
 
 import { PATH, CHAIN_IDS } from '../purser-core/defaults';
-import type { WalletArgumentsType } from '../purser-core/flowtypes';
+import type { WalletArgumentsType } from '../purser-core/types';
 
 import TrezorWallet from './class';
 import { payloadListener } from './helpers';
@@ -68,7 +68,7 @@ export const open = async (
    * Modify the default payload to overwrite the path with the new
    * coin type id derivation
    */
-  const modifiedPayloadObject: Object = Object.assign({}, PAYLOAD_XPUB, {
+  const modifiedPayloadObject = Object.assign({}, PAYLOAD_XPUB, {
     path: fromString(rootDerivationPath, true).toPathArray(),
   });
   /*
@@ -80,7 +80,7 @@ export const open = async (
      * the rest of the accounts
      */
     const { publicKey, chainCode } = await payloadListener({
-      payload: modifiedPayloadObject,
+      payload: modifiedPayloadObject.path,
     });
     const walletInstance: TrezorWallet = new TrezorWallet({
       publicKey,
@@ -115,7 +115,7 @@ export const open = async (
   }
 };
 
-const trezorWallet: Object = {
+const trezorWallet = {
   open,
 };
 
